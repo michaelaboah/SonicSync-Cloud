@@ -4,50 +4,51 @@ import (
 	"log"
 	"os"
 
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
-	"github.com/michaelaboah/sonic-sync-cloud/graph"
+  handlers "github.com/michaelaboah/sonic-sync-cloud/handlers"
 )
 
 const defaultPort = "8080"
-
+const defaultLogPath = "./logs/log.log"
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
+  logFile, err := setupLogFile(defaultLogPath)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  log.SetOutput(logFile)
+  log.SetFlags(log.LstdFlags | log.Lshortfile | log.Lmicroseconds)
+
+  log.Println("Log file created")
+
   r := gin.Default()
 
-  r.POST("/graphql", grapqhlHandler())
+  r.POST("/graphql", handlers.GrapqhlHandler())
 
-  r.GET("/graphql-playground", playgroundHandler())
+  r.GET("/graphql-playground", handlers.PlaygroundHandler())
 
   log.Fatal(r.Run(":" + port))
 
 }
 
-func grapqhlHandler() gin.HandlerFunc  {
-    
-	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
-  return func(ctx *gin.Context) {
-    h.ServeHTTP(ctx.Writer, ctx.Request)
+
+
+// create the required folder if necessary
+func setupLogFile(path string) (*os.File, error) {
+  
+  logFile, err := os.OpenFile(path, os.O_WRONLY | os.O_APPEND | os.O_CREATE,  0644)
+
+
+    if err != nil {
+    log.Fatal(err)
+    return nil, err 
   }
-
+  
+  return logFile, err
 }
-
-func playgroundHandler() gin.HandlerFunc  {
- 
-  h := playground.Handler("GraphQL playground", "/query")
-
-  return func(ctx *gin.Context) {
-    
-    h.ServeHTTP(ctx.Writer, ctx.Request)
-    
-  }
-}
-
-
-
