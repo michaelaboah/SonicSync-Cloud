@@ -2,11 +2,11 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/gin-gonic/gin"
 	"github.com/michaelaboah/sonic-sync-cloud/graph"
 )
 
@@ -18,11 +18,36 @@ func main() {
 		port = defaultPort
 	}
 
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+  r := gin.Default()
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+  r.POST("/graphql", grapqhlHandler())
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+  r.GET("/graphql-playground", playgroundHandler())
+
+  log.Fatal(r.Run(":" + port))
+
 }
+
+func grapqhlHandler() gin.HandlerFunc  {
+    
+	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+
+  return func(ctx *gin.Context) {
+    h.ServeHTTP(ctx.Writer, ctx.Request)
+  }
+
+}
+
+func playgroundHandler() gin.HandlerFunc  {
+ 
+  h := playground.Handler("GraphQL playground", "/query")
+
+  return func(ctx *gin.Context) {
+    
+    h.ServeHTTP(ctx.Writer, ctx.Request)
+    
+  }
+}
+
+
+
