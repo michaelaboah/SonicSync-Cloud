@@ -1,36 +1,62 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
-  handlers "github.com/michaelaboah/sonic-sync-cloud/handlers"
+	"github.com/michaelaboah/sonic-sync-cloud/database"
+	handlers "github.com/michaelaboah/sonic-sync-cloud/handlers"
+	"github.com/michaelaboah/sonic-sync-cloud/middleware"
 )
 
 const defaultPort = "8080"
 const defaultLogPath = "./logs/log.log"
 func main() {
 	port := os.Getenv("PORT")
+  fmt.Println(port)
 	if port == "" {
 		port = defaultPort
 	}
+
+  mongoURL := os.Getenv("MONGODB_URL")
+  fmt.Println(mongoURL)
+
 
   logFile, err := setupLogFile(defaultLogPath)
   if err != nil {
     log.Fatal(err)
   }
 
+
+
   log.SetOutput(logFile)
   log.SetFlags(log.LstdFlags | log.Lshortfile | log.Lmicroseconds)
-
   log.Println("Log file created")
 
+
+  mongoClient := database.DBInstance()
+  
+
   r := gin.Default()
+
+
+  r.Use(middleware.DbMiddleware(mongoClient))
 
   r.POST("/graphql", handlers.GrapqhlHandler())
 
   r.GET("/graphql-playground", handlers.PlaygroundHandler())
+
+  r.GET("/", func(ctx *gin.Context) {
+
+    ctx.JSON(http.StatusOK, gin.H{
+      "Hello": "World",
+    })
+
+  })
+
 
   log.Fatal(r.Run(":" + port))
 

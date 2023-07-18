@@ -1,1 +1,22 @@
 2023/07/16 14:17:08.008550 server.go:27: Log file created
+2023/07/18 18:28:07.783096 server.go:28: Log file created
+2023/07/18 18:41:09.720520 server.go:33: Log file created
+2023/07/18 18:41:09.720639 database.go:15: MONGODB_URL not specified in .env file
+2023/07/18 18:41:34.342297 server.go:33: Log file created
+2023/07/18 18:41:34.342352 database.go:15: MONGODB_URL not specified in .env file
+2023/07/18 18:42:14.389216 server.go:34: Log file created
+2023/07/18 18:42:14.389285 database.go:15: MONGODB_URL not specified in .env file
+2023/07/18 18:49:08.179648 server.go:33: Log file created
+2023/07/18 18:49:08.179723 database.go:15: MONGODB_URL not specified in .env file
+2023/07/18 18:50:04.812261 server.go:33: Log file created
+2023/07/18 18:50:04.812326 database.go:17: MONGODB_URL not specified in .env file
+2023/07/18 18:51:04.640720 server.go:33: Log file created
+2023/07/18 18:51:04.640782 database.go:17: MONGODB_URL not specified in .env file
+2023/07/18 18:52:12.677613 server.go:36: Log file created
+2023/07/18 18:52:12.677675 database.go:17: MONGODB_URL not specified in .env file
+2023/07/18 18:52:38.099385 server.go:36: Log file created
+2023/07/18 18:52:38.099445 database.go:17: MONGODB_URL not specified in .env file
+2023/07/18 18:52:54.951041 server.go:37: Log file created
+2023/07/18 18:52:54.951107 database.go:17: MONGODB_URL not specified in .env file
+2023/07/18 18:55:42.032457 server.go:37: Log file created
+2023/07/18 18:55:42.032521 database.go:20: MONGODB_URL not specified in .env file
