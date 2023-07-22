@@ -14,6 +14,12 @@ type Dimension struct {
 	Height float64 `json:"height"`
 }
 
+type DimensionInput struct {
+	Length float64 `json:"length"`
+	Width  float64 `json:"width"`
+	Height float64 `json:"height"`
+}
+
 type Item struct {
 	ID           string     `json:"id"`
 	CreatedAt    string     `json:"created_at"`
@@ -25,6 +31,20 @@ type Item struct {
 	Category     Category   `json:"category"`
 	Notes        *string    `json:"notes,omitempty"`
 	Dimensions   *Dimension `json:"dimensions,omitempty"`
+	PDFBlob      *string    `json:"pdf_blob,omitempty"`
+}
+
+type ItemInput struct {
+	CreatedAt    string          `json:"created_at"`
+	UpdatedAt    string          `json:"updated_at"`
+	Cost         float64         `json:"cost"`
+	Model        string          `json:"model"`
+	Weight       float64         `json:"weight"`
+	Manufacturer string          `json:"manufacturer"`
+	Category     Category        `json:"category"`
+	Notes        *string         `json:"notes,omitempty"`
+	Dimensions   *DimensionInput `json:"dimensions,omitempty"`
+	PDFBlob      *string         `json:"pdf_blob,omitempty"`
 }
 
 type User struct {
@@ -36,6 +56,112 @@ type User struct {
 type UserInput struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
+}
+
+type Analog string
+
+const (
+	AnalogXlrAnalog  Analog = "XLR_ANALOG"
+	AnalogXlrDigital Analog = "XLR_DIGITAL"
+	AnalogTs         Analog = "TS"
+	AnalogTrs        Analog = "TRS"
+	AnalogTrrs       Analog = "TRRS"
+)
+
+var AllAnalog = []Analog{
+	AnalogXlrAnalog,
+	AnalogXlrDigital,
+	AnalogTs,
+	AnalogTrs,
+	AnalogTrrs,
+}
+
+func (e Analog) IsValid() bool {
+	switch e {
+	case AnalogXlrAnalog, AnalogXlrDigital, AnalogTs, AnalogTrs, AnalogTrrs:
+		return true
+	}
+	return false
+}
+
+func (e Analog) String() string {
+	return string(e)
+}
+
+func (e *Analog) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Analog(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Analog", str)
+	}
+	return nil
+}
+
+func (e Analog) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Categories string
+
+const (
+	CategoriesConsole     Categories = "CONSOLE"
+	CategoriesProcessor   Categories = "PROCESSOR"
+	CategoriesMonitoring  Categories = "MONITORING"
+	CategoriesSpeaker     Categories = "SPEAKER"
+	CategoriesAmplifier   Categories = "AMPLIFIER"
+	CategoriesComputer    Categories = "COMPUTER"
+	CategoriesNetwork     Categories = "NETWORK"
+	CategoriesRadio       Categories = "RADIO"
+	CategoriesMicrophones Categories = "MICROPHONES"
+	CategoriesSpkHardware Categories = "SPK_HARDWARE"
+	CategoriesGeneric     Categories = "GENERIC"
+)
+
+var AllCategories = []Categories{
+	CategoriesConsole,
+	CategoriesProcessor,
+	CategoriesMonitoring,
+	CategoriesSpeaker,
+	CategoriesAmplifier,
+	CategoriesComputer,
+	CategoriesNetwork,
+	CategoriesRadio,
+	CategoriesMicrophones,
+	CategoriesSpkHardware,
+	CategoriesGeneric,
+}
+
+func (e Categories) IsValid() bool {
+	switch e {
+	case CategoriesConsole, CategoriesProcessor, CategoriesMonitoring, CategoriesSpeaker, CategoriesAmplifier, CategoriesComputer, CategoriesNetwork, CategoriesRadio, CategoriesMicrophones, CategoriesSpkHardware, CategoriesGeneric:
+		return true
+	}
+	return false
+}
+
+func (e Categories) String() string {
+	return string(e)
+}
+
+func (e *Categories) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Categories(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Categories", str)
+	}
+	return nil
+}
+
+func (e Categories) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type Category string
@@ -94,5 +220,199 @@ func (e *Category) UnmarshalGQL(v interface{}) error {
 }
 
 func (e Category) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type MidiType string
+
+const (
+	MidiTypeUsb    MidiType = "USB"
+	MidiTypeSerial MidiType = "SERIAL"
+)
+
+var AllMidiType = []MidiType{
+	MidiTypeUsb,
+	MidiTypeSerial,
+}
+
+func (e MidiType) IsValid() bool {
+	switch e {
+	case MidiTypeUsb, MidiTypeSerial:
+		return true
+	}
+	return false
+}
+
+func (e MidiType) String() string {
+	return string(e)
+}
+
+func (e *MidiType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MidiType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MidiType", str)
+	}
+	return nil
+}
+
+func (e MidiType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type PowerConnector string
+
+const (
+	PowerConnectorIec              PowerConnector = "IEC"
+	PowerConnectorEdison           PowerConnector = "EDISON"
+	PowerConnectorEdison20a        PowerConnector = "EDISON_20A"
+	PowerConnectorPowercon20a      PowerConnector = "POWERCON_20A"
+	PowerConnectorPowercon32a      PowerConnector = "POWERCON_32A"
+	PowerConnectorPowerconTrue1    PowerConnector = "POWERCON_TRUE1"
+	PowerConnectorPowerconTrue1Top PowerConnector = "POWERCON_TRUE1_TOP"
+	PowerConnectorL6_20            PowerConnector = "L6_20"
+	PowerConnectorL6_30            PowerConnector = "L6_30"
+	PowerConnectorL6_50            PowerConnector = "L6_50"
+	PowerConnectorL6_60            PowerConnector = "L6_60"
+)
+
+var AllPowerConnector = []PowerConnector{
+	PowerConnectorIec,
+	PowerConnectorEdison,
+	PowerConnectorEdison20a,
+	PowerConnectorPowercon20a,
+	PowerConnectorPowercon32a,
+	PowerConnectorPowerconTrue1,
+	PowerConnectorPowerconTrue1Top,
+	PowerConnectorL6_20,
+	PowerConnectorL6_30,
+	PowerConnectorL6_50,
+	PowerConnectorL6_60,
+}
+
+func (e PowerConnector) IsValid() bool {
+	switch e {
+	case PowerConnectorIec, PowerConnectorEdison, PowerConnectorEdison20a, PowerConnectorPowercon20a, PowerConnectorPowercon32a, PowerConnectorPowerconTrue1, PowerConnectorPowerconTrue1Top, PowerConnectorL6_20, PowerConnectorL6_30, PowerConnectorL6_50, PowerConnectorL6_60:
+		return true
+	}
+	return false
+}
+
+func (e PowerConnector) String() string {
+	return string(e)
+}
+
+func (e *PowerConnector) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = PowerConnector(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid PowerConnector", str)
+	}
+	return nil
+}
+
+func (e PowerConnector) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Protocol string
+
+const (
+	ProtocolDante    Protocol = "DANTE"
+	ProtocolAes67    Protocol = "AES_67"
+	ProtocolAvb      Protocol = "AVB"
+	ProtocolAvbMilan Protocol = "AVB_MILAN"
+	ProtocolOptocore Protocol = "OPTOCORE"
+	ProtocolUltranet Protocol = "ULTRANET"
+	ProtocolIP       Protocol = "IP"
+)
+
+var AllProtocol = []Protocol{
+	ProtocolDante,
+	ProtocolAes67,
+	ProtocolAvb,
+	ProtocolAvbMilan,
+	ProtocolOptocore,
+	ProtocolUltranet,
+	ProtocolIP,
+}
+
+func (e Protocol) IsValid() bool {
+	switch e {
+	case ProtocolDante, ProtocolAes67, ProtocolAvb, ProtocolAvbMilan, ProtocolOptocore, ProtocolUltranet, ProtocolIP:
+		return true
+	}
+	return false
+}
+
+func (e Protocol) String() string {
+	return string(e)
+}
+
+func (e *Protocol) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Protocol(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Protocol", str)
+	}
+	return nil
+}
+
+func (e Protocol) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type SampleRate string
+
+const (
+	SampleRateSd  SampleRate = "SD"
+	SampleRateHd  SampleRate = "HD"
+	SampleRateUhd SampleRate = "UHD"
+)
+
+var AllSampleRate = []SampleRate{
+	SampleRateSd,
+	SampleRateHd,
+	SampleRateUhd,
+}
+
+func (e SampleRate) IsValid() bool {
+	switch e {
+	case SampleRateSd, SampleRateHd, SampleRateUhd:
+		return true
+	}
+	return false
+}
+
+func (e SampleRate) String() string {
+	return string(e)
+}
+
+func (e *SampleRate) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SampleRate(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SampleRate", str)
+	}
+	return nil
+}
+
+func (e SampleRate) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

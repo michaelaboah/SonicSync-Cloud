@@ -1,0 +1,31 @@
+input ConsoleInput {
+  totalInputs: Int!
+  totalOutputs: Int!
+  totalBusses: Int!
+  physicalInputs: Int!
+  physicalOutputs: Int!
+  auxInputs: Int!
+  physicalAuxInputs: Int!
+  phantomPowerInputs: Int!
+  faders: Int!
+  motorized: Boolean!
+  midi: MidiType!
+  protocolInputs: Int!
+  signalProtocol: Protocol!
+  can_expand: Boolean!
+  max_sample_rate: SampleRate!
+  notes: [String!]!
+  model: String!
+  searchModel: String
+  power: ElectricalInput!
+}
+
+input ElectricalInput {
+  lower_voltage: Float
+  upper_voltage: Float
+  wattage: Float!
+  max_wattage: Float!
+  redundant: Boolean
+  input_connector: PowerConnector!
+  output_connector: PowerConnector
+}

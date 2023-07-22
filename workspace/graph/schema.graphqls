@@ -15,11 +15,37 @@ input UserInput {
 
 type Query {
   users: [User!]!
+  items: [Item!]!
+  find_by_model: [Item]!
+  find_by_id: Item
 }
 
 
 type Mutation {
   createUser(input: UserInput!): User!
+  createItem(input: ItemInput!): Item!
+  updateItem(input: ItemInput!): Item!
+}
+
+
+input ItemInput {
+  created_at: String!
+  updated_at: String!
+  cost: Float!
+  model: String!
+  weight: Float!
+  manufacturer: String! 
+  category: Category! = GENERIC
+  # details: CategoryDetails 
+  notes: String
+  dimensions: DimensionInput
+  pdf_blob: String
+}
+
+input DimensionInput {
+  length: Float!
+  width: Float!
+  height: Float!
 }
 
 
@@ -36,6 +62,7 @@ type Item {
   # details: CategoryDetails 
   notes: String
   dimensions: Dimension
+  pdf_blob: String
 }
 
 type Dimension {

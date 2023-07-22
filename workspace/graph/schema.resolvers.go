@@ -16,9 +16,34 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput
 	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
 }
 
+// CreateItem is the resolver for the createItem field.
+func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented: CreateItem - createItem"))
+}
+
+// UpdateItem is the resolver for the updateItem field.
+func (r *mutationResolver) UpdateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented: UpdateItem - updateItem"))
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	panic(fmt.Errorf("not implemented: Users - users"))
+}
+
+// Items is the resolver for the items field.
+func (r *queryResolver) Items(ctx context.Context) ([]*model.Item, error) {
+	panic(fmt.Errorf("not implemented: Items - items"))
+}
+
+// FindByModel is the resolver for the find_by_model field.
+func (r *queryResolver) FindByModel(ctx context.Context) ([]*model.Item, error) {
+	panic(fmt.Errorf("not implemented: FindByModel - find_by_model"))
+}
+
+// FindByID is the resolver for the find_by_id field.
+func (r *queryResolver) FindByID(ctx context.Context) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented: FindByID - find_by_id"))
 }
 
 // Mutation returns MutationResolver implementation.

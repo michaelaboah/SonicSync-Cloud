@@ -1,0 +1,56 @@
+enum Categories {
+  CONSOLE
+  PROCESSOR
+  MONITORING
+  SPEAKER
+  AMPLIFIER
+  COMPUTER
+  NETWORK
+  RADIO
+  MICROPHONES
+  SPK_HARDWARE
+  GENERIC
+}
+
+enum SampleRate {
+  SD
+  HD
+  UHD
+}
+
+enum MidiType {
+  USB
+  SERIAL
+}
+
+enum Analog {
+  XLR_ANALOG
+  XLR_DIGITAL
+  TS
+  TRS
+  TRRS
+}
+
+enum PowerConnector {
+  IEC
+  EDISON
+  EDISON_20A
+  POWERCON_20A
+  POWERCON_32A
+  POWERCON_TRUE1
+  POWERCON_TRUE1_TOP
+  L6_20
+  L6_30
+  L6_50
+  L6_60
+}
+
+enum Protocol {
+  DANTE
+  AES_67
+  AVB
+  AVB_MILAN
+  OPTOCORE
+  ULTRANET
+  IP
+}
