@@ -39,7 +39,7 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 
   switch input.Category {
     case model.CategoryConsole: 
-      details = input.Details.ConsoleInput 
+      details = input.Details.ConsoleInput
   }
 
 

@@ -7,6 +7,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+
 	"github.com/michaelaboah/sonic-sync-cloud/database"
 	handlers "github.com/michaelaboah/sonic-sync-cloud/handlers"
 	"github.com/michaelaboah/sonic-sync-cloud/middleware"
@@ -15,6 +17,10 @@ import (
 const defaultPort = "8080"
 const defaultLogPath = "./logs/log.log"
 func main() {
+  godotenv.Load("../workspace/.env")
+
+
+
 	port := os.Getenv("PORT")
   fmt.Println(port)
 	if port == "" {

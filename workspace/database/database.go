@@ -11,9 +11,9 @@ import (
 )
 
 func DBInstance() *mongo.Client {
-
+   
   mongoURL := os.Getenv("MONGODB_URL")
-  mongoURL = "mongodb+srv://sonic-sync-db-0:BrSqY4FtCPHOHSBQ@phono-cluster-0.w73yh2p.mongodb.net/?retryWrites=true&w=majority"
+  // mongoURL = "mongodb+srv://sonic-sync-db-0:BrSqY4FtCPHOHSBQ@phono-cluster-0.w73yh2p.mongodb.net/?retryWrites=true&w=majority"
 
 
   if len(mongoURL) == 0 {

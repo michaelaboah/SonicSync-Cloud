@@ -70,3 +70,8 @@
 2023/07/24 18:41:19.424275 server.go:38: Log file created
 2023/07/24 18:50:14.988865 server.go:38: Log file created
 2023/07/24 22:09:45.995526 server.go:38: Log file created
+2023/07/25 14:24:47.322165 server.go:38: Log file created
+2023/07/25 14:24:47.322311 database.go:21: MONGODB_URL not specified in .env file
+2023/07/25 14:27:00.818480 server.go:41: Log file created
+2023/07/25 14:27:00.818527 database.go:21: MONGODB_URL not specified in .env file
+2023/07/25 14:27:31.627660 server.go:44: Log file created
