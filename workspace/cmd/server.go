@@ -17,6 +17,8 @@ import (
 const defaultPort = "8080"
 const defaultLogPath = "./logs/log.log"
 func main() {
+
+
   godotenv.Load("../workspace/.env")
 
 
@@ -26,10 +28,6 @@ func main() {
 	if port == "" {
 		port = defaultPort
 	}
-
-  // mongoURL := os.Getenv("MONGODB_URL")
-  // mongoURL = "mongodb+srv://sonic-sync-db-0:BrSqY4FtCPHOHSBQ@phono-cluster-0.w73yh2p.mongodb.net/?retryWrites=true&w=majority"
-  // fmt.Println(len(mongoURL))
 
 
   logFile, err := setupLogFile(defaultLogPath)
