@@ -2,6 +2,8 @@
 #
 # https://gqlgen.com/getting-started/
 
+directive @oneOf on INPUT_OBJECT
+
 type User {
   id: ID!
   name: String!
@@ -28,6 +30,8 @@ type Mutation {
 }
 
 
+
+
 input ItemInput {
   created_at: String!
   updated_at: String!
@@ -36,7 +40,7 @@ input ItemInput {
   weight: Float!
   manufacturer: String! 
   category: Category! = GENERIC
-  # details: CategoryDetails 
+  details: CategoryDetailsInput 
   notes: String
   dimensions: DimensionInput
   pdf_blob: String
@@ -48,8 +52,12 @@ input DimensionInput {
   height: Float!
 }
 
+input CategoryDetailsInput @oneOf {
+  console_input: ConsoleInput 
+}
 
-# union CategoryDetails = Console | Amplifier
+union CategoryDetails = Console
+
 type Item {
   id: ID!
   created_at: String!
@@ -59,7 +67,7 @@ type Item {
   weight: Float!
   manufacturer: String! 
   category: Category!
-  # details: CategoryDetails 
+  details: CategoryDetails 
   notes: String
   dimensions: Dimension
   pdf_blob: String

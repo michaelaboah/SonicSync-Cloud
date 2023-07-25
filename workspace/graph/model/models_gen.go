@@ -8,6 +8,54 @@ import (
 	"strconv"
 )
 
+type CategoryDetails interface {
+	IsCategoryDetails()
+}
+
+type CategoryDetailsInput struct {
+	ConsoleInput *ConsoleInput `json:"console_input,omitempty"`
+}
+
+type Console struct {
+	TotalInputs        int        `json:"total_inputs"`
+	TotalOutputs       int        `json:"total_outputs"`
+	TotalBusses        int        `json:"total_busses"`
+	PhysicalInputs     int        `json:"physical_inputs"`
+	PhysicalOutputs    int        `json:"physical_outputs"`
+	AuxInputs          int        `json:"aux_inputs"`
+	PhysicalAuxInputs  int        `json:"physical_aux_inputs"`
+	PhantomPowerInputs int        `json:"phantom_power_inputs"`
+	Faders             int        `json:"faders"`
+	Motorized          bool       `json:"motorized"`
+	Midi               MidiType   `json:"midi"`
+	ProtocolInputs     int        `json:"protocol_inputs"`
+	SignalProtocol     Protocol   `json:"signal_protocol"`
+	CanExpand          bool       `json:"can_expand"`
+	MaxSampleRate      SampleRate `json:"max_sample_rate"`
+	Power              *Power     `json:"power"`
+}
+
+func (Console) IsCategoryDetails() {}
+
+type ConsoleInput struct {
+	TotalInputs        int         `json:"total_inputs"`
+	TotalOutputs       int         `json:"total_outputs"`
+	TotalBusses        int         `json:"total_busses"`
+	PhysicalInputs     int         `json:"physical_inputs"`
+	PhysicalOutputs    int         `json:"physical_outputs"`
+	AuxInputs          int         `json:"aux_inputs"`
+	PhysicalAuxInputs  int         `json:"physical_aux_inputs"`
+	PhantomPowerInputs int         `json:"phantom_power_inputs"`
+	Faders             int         `json:"faders"`
+	Motorized          bool        `json:"motorized"`
+	Midi               MidiType    `json:"midi"`
+	ProtocolInputs     int         `json:"protocol_inputs"`
+	SignalProtocol     Protocol    `json:"signal_protocol"`
+	CanExpand          bool        `json:"can_expand"`
+	MaxSampleRate      SampleRate  `json:"max_sample_rate"`
+	Power              *PowerInput `json:"power"`
+}
+
 type Dimension struct {
 	Length float64 `json:"length"`
 	Width  float64 `json:"width"`
@@ -21,20 +69,7 @@ type DimensionInput struct {
 }
 
 type Item struct {
-	ID           string     `json:"id"`
-	CreatedAt    string     `json:"created_at"`
-	UpdatedAt    string     `json:"updated_at"`
-	Cost         float64    `json:"cost"`
-	Model        string     `json:"model"`
-	Weight       float64    `json:"weight"`
-	Manufacturer string     `json:"manufacturer"`
-	Category     Category   `json:"category"`
-	Notes        *string    `json:"notes,omitempty"`
-	Dimensions   *Dimension `json:"dimensions,omitempty"`
-	PDFBlob      *string    `json:"pdf_blob,omitempty"`
-}
-
-type ItemInput struct {
+	ID           string          `json:"id"`
 	CreatedAt    string          `json:"created_at"`
 	UpdatedAt    string          `json:"updated_at"`
 	Cost         float64         `json:"cost"`
@@ -42,9 +77,44 @@ type ItemInput struct {
 	Weight       float64         `json:"weight"`
 	Manufacturer string          `json:"manufacturer"`
 	Category     Category        `json:"category"`
+	Details      CategoryDetails `json:"details,omitempty"`
 	Notes        *string         `json:"notes,omitempty"`
-	Dimensions   *DimensionInput `json:"dimensions,omitempty"`
+	Dimensions   *Dimension      `json:"dimensions,omitempty"`
 	PDFBlob      *string         `json:"pdf_blob,omitempty"`
+}
+
+type ItemInput struct {
+	CreatedAt    string                `json:"created_at"`
+	UpdatedAt    string                `json:"updated_at"`
+	Cost         float64               `json:"cost"`
+	Model        string                `json:"model"`
+	Weight       float64               `json:"weight"`
+	Manufacturer string                `json:"manufacturer"`
+	Category     Category              `json:"category"`
+	Details      *CategoryDetailsInput `json:"details,omitempty"`
+	Notes        *string               `json:"notes,omitempty"`
+	Dimensions   *DimensionInput       `json:"dimensions,omitempty"`
+	PDFBlob      *string               `json:"pdf_blob,omitempty"`
+}
+
+type Power struct {
+	LowerVoltage    *float64        `json:"lower_voltage,omitempty"`
+	UpperVoltage    *float64        `json:"upper_voltage,omitempty"`
+	Wattage         float64         `json:"wattage"`
+	MaxWattage      float64         `json:"max_wattage"`
+	Redundant       *bool           `json:"redundant,omitempty"`
+	InputConnector  PowerConnector  `json:"input_connector"`
+	OutputConnector *PowerConnector `json:"output_connector,omitempty"`
+}
+
+type PowerInput struct {
+	LowerVoltage    *float64        `json:"lower_voltage,omitempty"`
+	UpperVoltage    *float64        `json:"upper_voltage,omitempty"`
+	Wattage         float64         `json:"wattage"`
+	MaxWattage      float64         `json:"max_wattage"`
+	Redundant       *bool           `json:"redundant,omitempty"`
+	InputConnector  PowerConnector  `json:"input_connector"`
+	OutputConnector *PowerConnector `json:"output_connector,omitempty"`
 }
 
 type User struct {

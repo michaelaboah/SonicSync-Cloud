@@ -21,8 +21,9 @@ func main() {
 		port = defaultPort
 	}
 
-  mongoURL := os.Getenv("MONGODB_URL")
-  fmt.Println(mongoURL)
+  // mongoURL := os.Getenv("MONGODB_URL")
+  // mongoURL = "mongodb+srv://sonic-sync-db-0:BrSqY4FtCPHOHSBQ@phono-cluster-0.w73yh2p.mongodb.net/?retryWrites=true&w=majority"
+  // fmt.Println(len(mongoURL))
 
 
   logFile, err := setupLogFile(defaultLogPath)
@@ -43,9 +44,11 @@ func main() {
   r := gin.Default()
 
 
+  
+
   r.Use(middleware.DbMiddleware(mongoClient))
 
-  r.POST("/graphql", handlers.GrapqhlHandler())
+  r.POST("/graphql", handlers.GrapqhlHandler(mongoClient))
 
   r.GET("/graphql-playground", handlers.PlaygroundHandler())
 

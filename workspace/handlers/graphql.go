@@ -5,11 +5,12 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
 	"github.com/michaelaboah/sonic-sync-cloud/graph"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func GrapqhlHandler() gin.HandlerFunc  {
+func GrapqhlHandler(mongoClient *mongo.Client) gin.HandlerFunc  {
     
-	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+  h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{DB: mongoClient}}))
 
   return func(ctx *gin.Context) {
     h.ServeHTTP(ctx.Writer, ctx.Request)
@@ -19,7 +20,7 @@ func GrapqhlHandler() gin.HandlerFunc  {
 
 func PlaygroundHandler() gin.HandlerFunc  {
  
-  h := playground.Handler("GraphQL playground", "/query")
+  h := playground.Handler("GraphQL playground", "/graphql")
 
   return func(ctx *gin.Context) {
     

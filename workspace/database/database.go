@@ -2,9 +2,9 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
+  "fmt"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -13,11 +13,12 @@ import (
 func DBInstance() *mongo.Client {
 
   mongoURL := os.Getenv("MONGODB_URL")
-  fmt.Println(mongoURL)
+  mongoURL = "mongodb+srv://sonic-sync-db-0:BrSqY4FtCPHOHSBQ@phono-cluster-0.w73yh2p.mongodb.net/?retryWrites=true&w=majority"
 
 
-  if mongoURL == "" {
-    log.Fatal("MONGODB_URL not specified in .env file")
+  if len(mongoURL) == 0 {
+    fmt.Println("MONGODB_URL not specified in .env file")
+    log.Fatalln("MONGODB_URL not specified in .env file")
   }
 
   serverAPI := options.ServerAPI(options.ServerAPIVersion1)

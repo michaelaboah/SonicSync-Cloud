@@ -9,16 +9,57 @@ import (
 	"fmt"
 
 	"github.com/michaelaboah/sonic-sync-cloud/graph/model"
+	// "go.mongodb.org/mongo-driver/bson"
 )
+
+const ClientsDB = "clients-db"
+const UserCol = "users"
+const EquipDB = "equipment-inventory"
+const ItemsCol = "items"
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+
+  items := r.DB.Database(ClientsDB).Collection(UserCol)
+
+  user := &model.User{
+  	ID:    "0",
+  	Name:  input.Name,
+  	Email: input.Email,
+  }	
+
+  items.InsertOne(ctx, user)
+  return user, nil
 }
 
 // CreateItem is the resolver for the createItem field.
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
-	panic(fmt.Errorf("not implemented: CreateItem - createItem"))
+ 
+  var details model.CategoryDetails
+
+  switch input.Category {
+    case model.CategoryConsole: 
+      details = input.Details.ConsoleInput 
+  }
+
+
+  item := &model.Item{
+  	ID:           "",
+  	CreatedAt:    input.CreatedAt,
+  	UpdatedAt:    input.UpdatedAt,
+  	Cost:         input.Cost,
+  	Model:        input.Model,
+  	Weight:       input.Weight,
+  	Manufacturer: input.Manufacturer,
+  	Category:     input.Category,
+  	Details:      details,
+  	Notes:        &input.Model,
+  	Dimensions:   (*model.Dimension)(input.Dimensions),
+  	PDFBlob:      input.PDFBlob,
+  }
+
+  r.items = append(r.items, item)
+  return item, nil
 }
 
 // UpdateItem is the resolver for the updateItem field.

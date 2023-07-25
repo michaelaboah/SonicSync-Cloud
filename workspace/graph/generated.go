@@ -42,9 +42,29 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	OneOf func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error)
 }
 
 type ComplexityRoot struct {
+	Console struct {
+		AuxInputs          func(childComplexity int) int
+		CanExpand          func(childComplexity int) int
+		Faders             func(childComplexity int) int
+		MaxSampleRate      func(childComplexity int) int
+		Midi               func(childComplexity int) int
+		Motorized          func(childComplexity int) int
+		PhantomPowerInputs func(childComplexity int) int
+		PhysicalAuxInputs  func(childComplexity int) int
+		PhysicalInputs     func(childComplexity int) int
+		PhysicalOutputs    func(childComplexity int) int
+		Power              func(childComplexity int) int
+		ProtocolInputs     func(childComplexity int) int
+		SignalProtocol     func(childComplexity int) int
+		TotalBusses        func(childComplexity int) int
+		TotalInputs        func(childComplexity int) int
+		TotalOutputs       func(childComplexity int) int
+	}
+
 	Dimension struct {
 		Height func(childComplexity int) int
 		Length func(childComplexity int) int
@@ -55,6 +75,7 @@ type ComplexityRoot struct {
 		Category     func(childComplexity int) int
 		Cost         func(childComplexity int) int
 		CreatedAt    func(childComplexity int) int
+		Details      func(childComplexity int) int
 		Dimensions   func(childComplexity int) int
 		ID           func(childComplexity int) int
 		Manufacturer func(childComplexity int) int
@@ -69,6 +90,16 @@ type ComplexityRoot struct {
 		CreateItem func(childComplexity int, input model.ItemInput) int
 		CreateUser func(childComplexity int, input model.UserInput) int
 		UpdateItem func(childComplexity int, input model.ItemInput) int
+	}
+
+	Power struct {
+		InputConnector  func(childComplexity int) int
+		LowerVoltage    func(childComplexity int) int
+		MaxWattage      func(childComplexity int) int
+		OutputConnector func(childComplexity int) int
+		Redundant       func(childComplexity int) int
+		UpperVoltage    func(childComplexity int) int
+		Wattage         func(childComplexity int) int
 	}
 
 	Query struct {
@@ -112,6 +143,118 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Console.aux_inputs":
+		if e.complexity.Console.AuxInputs == nil {
+			break
+		}
+
+		return e.complexity.Console.AuxInputs(childComplexity), true
+
+	case "Console.can_expand":
+		if e.complexity.Console.CanExpand == nil {
+			break
+		}
+
+		return e.complexity.Console.CanExpand(childComplexity), true
+
+	case "Console.faders":
+		if e.complexity.Console.Faders == nil {
+			break
+		}
+
+		return e.complexity.Console.Faders(childComplexity), true
+
+	case "Console.max_sample_rate":
+		if e.complexity.Console.MaxSampleRate == nil {
+			break
+		}
+
+		return e.complexity.Console.MaxSampleRate(childComplexity), true
+
+	case "Console.midi":
+		if e.complexity.Console.Midi == nil {
+			break
+		}
+
+		return e.complexity.Console.Midi(childComplexity), true
+
+	case "Console.motorized":
+		if e.complexity.Console.Motorized == nil {
+			break
+		}
+
+		return e.complexity.Console.Motorized(childComplexity), true
+
+	case "Console.phantom_power_inputs":
+		if e.complexity.Console.PhantomPowerInputs == nil {
+			break
+		}
+
+		return e.complexity.Console.PhantomPowerInputs(childComplexity), true
+
+	case "Console.physical_aux_inputs":
+		if e.complexity.Console.PhysicalAuxInputs == nil {
+			break
+		}
+
+		return e.complexity.Console.PhysicalAuxInputs(childComplexity), true
+
+	case "Console.physical_inputs":
+		if e.complexity.Console.PhysicalInputs == nil {
+			break
+		}
+
+		return e.complexity.Console.PhysicalInputs(childComplexity), true
+
+	case "Console.physical_outputs":
+		if e.complexity.Console.PhysicalOutputs == nil {
+			break
+		}
+
+		return e.complexity.Console.PhysicalOutputs(childComplexity), true
+
+	case "Console.power":
+		if e.complexity.Console.Power == nil {
+			break
+		}
+
+		return e.complexity.Console.Power(childComplexity), true
+
+	case "Console.protocol_inputs":
+		if e.complexity.Console.ProtocolInputs == nil {
+			break
+		}
+
+		return e.complexity.Console.ProtocolInputs(childComplexity), true
+
+	case "Console.signal_protocol":
+		if e.complexity.Console.SignalProtocol == nil {
+			break
+		}
+
+		return e.complexity.Console.SignalProtocol(childComplexity), true
+
+	case "Console.total_busses":
+		if e.complexity.Console.TotalBusses == nil {
+			break
+		}
+
+		return e.complexity.Console.TotalBusses(childComplexity), true
+
+	case "Console.total_inputs":
+		if e.complexity.Console.TotalInputs == nil {
+			break
+		}
+
+		return e.complexity.Console.TotalInputs(childComplexity), true
+
+	case "Console.total_outputs":
+		if e.complexity.Console.TotalOutputs == nil {
+			break
+		}
+
+		return e.complexity.Console.TotalOutputs(childComplexity), true
+
 	case "Dimension.height":
 		if e.complexity.Dimension.Height == nil {
 			break
@@ -153,6 +296,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Item.CreatedAt(childComplexity), true
+
+	case "Item.details":
+		if e.complexity.Item.Details == nil {
+			break
+		}
+
+		return e.complexity.Item.Details(childComplexity), true
 
 	case "Item.dimensions":
 		if e.complexity.Item.Dimensions == nil {
@@ -246,6 +396,55 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdateItem(childComplexity, args["input"].(model.ItemInput)), true
 
+	case "Power.input_connector":
+		if e.complexity.Power.InputConnector == nil {
+			break
+		}
+
+		return e.complexity.Power.InputConnector(childComplexity), true
+
+	case "Power.lower_voltage":
+		if e.complexity.Power.LowerVoltage == nil {
+			break
+		}
+
+		return e.complexity.Power.LowerVoltage(childComplexity), true
+
+	case "Power.max_wattage":
+		if e.complexity.Power.MaxWattage == nil {
+			break
+		}
+
+		return e.complexity.Power.MaxWattage(childComplexity), true
+
+	case "Power.output_connector":
+		if e.complexity.Power.OutputConnector == nil {
+			break
+		}
+
+		return e.complexity.Power.OutputConnector(childComplexity), true
+
+	case "Power.redundant":
+		if e.complexity.Power.Redundant == nil {
+			break
+		}
+
+		return e.complexity.Power.Redundant(childComplexity), true
+
+	case "Power.upper_voltage":
+		if e.complexity.Power.UpperVoltage == nil {
+			break
+		}
+
+		return e.complexity.Power.UpperVoltage(childComplexity), true
+
+	case "Power.wattage":
+		if e.complexity.Power.Wattage == nil {
+			break
+		}
+
+		return e.complexity.Power.Wattage(childComplexity), true
+
 	case "Query.find_by_id":
 		if e.complexity.Query.FindByID == nil {
 			break
@@ -303,8 +502,11 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputCategoryDetailsInput,
+		ec.unmarshalInputConsoleInput,
 		ec.unmarshalInputDimensionInput,
 		ec.unmarshalInputItemInput,
+		ec.unmarshalInputPowerInput,
 		ec.unmarshalInputUserInput,
 	)
 	first := true
@@ -402,7 +604,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
-//go:embed "schema.graphqls" "schemas/enums.graphqls"
+//go:embed "schema.graphqls" "schemas/category_details.graphqls" "schemas/enums.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -415,6 +617,7 @@ func sourceData(filename string) string {
 
 var sources = []*ast.Source{
 	{Name: "schema.graphqls", Input: sourceData("schema.graphqls"), BuiltIn: false},
+	{Name: "schemas/category_details.graphqls", Input: sourceData("schemas/category_details.graphqls"), BuiltIn: false},
 	{Name: "schemas/enums.graphqls", Input: sourceData("schemas/enums.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -520,6 +723,726 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _Console_total_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_total_inputs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalInputs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_total_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_total_outputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_total_outputs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalOutputs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_total_outputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_total_busses(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_total_busses(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalBusses, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_total_busses(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_physical_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_physical_inputs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PhysicalInputs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_physical_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_physical_outputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_physical_outputs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PhysicalOutputs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_physical_outputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_aux_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_aux_inputs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AuxInputs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_aux_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_physical_aux_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_physical_aux_inputs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PhysicalAuxInputs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_physical_aux_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_phantom_power_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_phantom_power_inputs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PhantomPowerInputs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_phantom_power_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_faders(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_faders(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Faders, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_faders(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_motorized(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_motorized(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Motorized, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_motorized(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_midi(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_midi(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Midi, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.MidiType)
+	fc.Result = res
+	return ec.marshalNMidiType2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐMidiType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_midi(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type MidiType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_protocol_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_protocol_inputs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProtocolInputs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_protocol_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_signal_protocol(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_signal_protocol(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.SignalProtocol, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.Protocol)
+	fc.Result = res
+	return ec.marshalNProtocol2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐProtocol(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_signal_protocol(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Protocol does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_can_expand(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_can_expand(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CanExpand, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_can_expand(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_max_sample_rate(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_max_sample_rate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxSampleRate, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.SampleRate)
+	fc.Result = res
+	return ec.marshalNSampleRate2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐSampleRate(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_max_sample_rate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type SampleRate does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Console_power(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_power(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Power, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Power)
+	fc.Result = res
+	return ec.marshalNPower2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPower(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Console_power(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Console",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "lower_voltage":
+				return ec.fieldContext_Power_lower_voltage(ctx, field)
+			case "upper_voltage":
+				return ec.fieldContext_Power_upper_voltage(ctx, field)
+			case "wattage":
+				return ec.fieldContext_Power_wattage(ctx, field)
+			case "max_wattage":
+				return ec.fieldContext_Power_max_wattage(ctx, field)
+			case "redundant":
+				return ec.fieldContext_Power_redundant(ctx, field)
+			case "input_connector":
+				return ec.fieldContext_Power_input_connector(ctx, field)
+			case "output_connector":
+				return ec.fieldContext_Power_output_connector(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Power", field.Name)
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _Dimension_length(ctx context.Context, field graphql.CollectedField, obj *model.Dimension) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Dimension_length(ctx, field)
@@ -1005,6 +1928,47 @@ func (ec *executionContext) fieldContext_Item_category(ctx context.Context, fiel
 	return fc, nil
 }
 
+func (ec *executionContext) _Item_details(ctx context.Context, field graphql.CollectedField, obj *model.Item) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Item_details(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Details, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model.CategoryDetails)
+	fc.Result = res
+	return ec.marshalOCategoryDetails2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐCategoryDetails(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Item_details(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Item",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type CategoryDetails does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Item_notes(ctx context.Context, field graphql.CollectedField, obj *model.Item) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Item_notes(ctx, field)
 	if err != nil {
@@ -1254,6 +2218,8 @@ func (ec *executionContext) fieldContext_Mutation_createItem(ctx context.Context
 				return ec.fieldContext_Item_manufacturer(ctx, field)
 			case "category":
 				return ec.fieldContext_Item_category(ctx, field)
+			case "details":
+				return ec.fieldContext_Item_details(ctx, field)
 			case "notes":
 				return ec.fieldContext_Item_notes(ctx, field)
 			case "dimensions":
@@ -1333,6 +2299,8 @@ func (ec *executionContext) fieldContext_Mutation_updateItem(ctx context.Context
 				return ec.fieldContext_Item_manufacturer(ctx, field)
 			case "category":
 				return ec.fieldContext_Item_category(ctx, field)
+			case "details":
+				return ec.fieldContext_Item_details(ctx, field)
 			case "notes":
 				return ec.fieldContext_Item_notes(ctx, field)
 			case "dimensions":
@@ -1353,6 +2321,302 @@ func (ec *executionContext) fieldContext_Mutation_updateItem(ctx context.Context
 	if fc.Args, err = ec.field_Mutation_updateItem_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Power_lower_voltage(ctx context.Context, field graphql.CollectedField, obj *model.Power) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Power_lower_voltage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LowerVoltage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Power_lower_voltage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Power",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Power_upper_voltage(ctx context.Context, field graphql.CollectedField, obj *model.Power) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Power_upper_voltage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpperVoltage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Power_upper_voltage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Power",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Power_wattage(ctx context.Context, field graphql.CollectedField, obj *model.Power) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Power_wattage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Wattage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Power_wattage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Power",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Power_max_wattage(ctx context.Context, field graphql.CollectedField, obj *model.Power) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Power_max_wattage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxWattage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Power_max_wattage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Power",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Power_redundant(ctx context.Context, field graphql.CollectedField, obj *model.Power) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Power_redundant(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Redundant, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Power_redundant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Power",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Power_input_connector(ctx context.Context, field graphql.CollectedField, obj *model.Power) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Power_input_connector(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.InputConnector, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.PowerConnector)
+	fc.Result = res
+	return ec.marshalNPowerConnector2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerConnector(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Power_input_connector(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Power",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type PowerConnector does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Power_output_connector(ctx context.Context, field graphql.CollectedField, obj *model.Power) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Power_output_connector(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OutputConnector, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.PowerConnector)
+	fc.Result = res
+	return ec.marshalOPowerConnector2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerConnector(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Power_output_connector(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Power",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type PowerConnector does not have child fields")
+		},
 	}
 	return fc, nil
 }
@@ -1464,6 +2728,8 @@ func (ec *executionContext) fieldContext_Query_items(ctx context.Context, field 
 				return ec.fieldContext_Item_manufacturer(ctx, field)
 			case "category":
 				return ec.fieldContext_Item_category(ctx, field)
+			case "details":
+				return ec.fieldContext_Item_details(ctx, field)
 			case "notes":
 				return ec.fieldContext_Item_notes(ctx, field)
 			case "dimensions":
@@ -1532,6 +2798,8 @@ func (ec *executionContext) fieldContext_Query_find_by_model(ctx context.Context
 				return ec.fieldContext_Item_manufacturer(ctx, field)
 			case "category":
 				return ec.fieldContext_Item_category(ctx, field)
+			case "details":
+				return ec.fieldContext_Item_details(ctx, field)
 			case "notes":
 				return ec.fieldContext_Item_notes(ctx, field)
 			case "dimensions":
@@ -1597,6 +2865,8 @@ func (ec *executionContext) fieldContext_Query_find_by_id(ctx context.Context, f
 				return ec.fieldContext_Item_manufacturer(ctx, field)
 			case "category":
 				return ec.fieldContext_Item_category(ctx, field)
+			case "details":
+				return ec.fieldContext_Item_details(ctx, field)
 			case "notes":
 				return ec.fieldContext_Item_notes(ctx, field)
 			case "dimensions":
@@ -3644,6 +4914,216 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputCategoryDetailsInput(ctx context.Context, obj interface{}) (model.CategoryDetailsInput, error) {
+	var it model.CategoryDetailsInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"console_input"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "console_input":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("console_input"))
+			directive0 := func(ctx context.Context) (interface{}, error) {
+				return ec.unmarshalOConsoleInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐConsoleInput(ctx, v)
+			}
+			directive1 := func(ctx context.Context) (interface{}, error) {
+				if ec.directives.OneOf == nil {
+					return nil, errors.New("directive oneOf is not implemented")
+				}
+				return ec.directives.OneOf(ctx, obj, directive0)
+			}
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*model.ConsoleInput); ok {
+				it.ConsoleInput = data
+			} else if tmp == nil {
+				it.ConsoleInput = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *github.com/michaelaboah/sonic-sync-cloud/graph/model.ConsoleInput`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputConsoleInput(ctx context.Context, obj interface{}) (model.ConsoleInput, error) {
+	var it model.ConsoleInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"total_inputs", "total_outputs", "total_busses", "physical_inputs", "physical_outputs", "aux_inputs", "physical_aux_inputs", "phantom_power_inputs", "faders", "motorized", "midi", "protocol_inputs", "signal_protocol", "can_expand", "max_sample_rate", "power"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "total_inputs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("total_inputs"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TotalInputs = data
+		case "total_outputs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("total_outputs"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TotalOutputs = data
+		case "total_busses":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("total_busses"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TotalBusses = data
+		case "physical_inputs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("physical_inputs"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PhysicalInputs = data
+		case "physical_outputs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("physical_outputs"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PhysicalOutputs = data
+		case "aux_inputs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("aux_inputs"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuxInputs = data
+		case "physical_aux_inputs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("physical_aux_inputs"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PhysicalAuxInputs = data
+		case "phantom_power_inputs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("phantom_power_inputs"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PhantomPowerInputs = data
+		case "faders":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("faders"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Faders = data
+		case "motorized":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("motorized"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Motorized = data
+		case "midi":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("midi"))
+			data, err := ec.unmarshalNMidiType2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐMidiType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Midi = data
+		case "protocol_inputs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("protocol_inputs"))
+			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ProtocolInputs = data
+		case "signal_protocol":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("signal_protocol"))
+			data, err := ec.unmarshalNProtocol2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐProtocol(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SignalProtocol = data
+		case "can_expand":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("can_expand"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CanExpand = data
+		case "max_sample_rate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("max_sample_rate"))
+			data, err := ec.unmarshalNSampleRate2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐSampleRate(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxSampleRate = data
+		case "power":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("power"))
+			data, err := ec.unmarshalNPowerInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Power = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputDimensionInput(ctx context.Context, obj interface{}) (model.DimensionInput, error) {
 	var it model.DimensionInput
 	asMap := map[string]interface{}{}
@@ -3702,7 +5182,7 @@ func (ec *executionContext) unmarshalInputItemInput(ctx context.Context, obj int
 		asMap["category"] = "GENERIC"
 	}
 
-	fieldsInOrder := [...]string{"created_at", "updated_at", "cost", "model", "weight", "manufacturer", "category", "notes", "dimensions", "pdf_blob"}
+	fieldsInOrder := [...]string{"created_at", "updated_at", "cost", "model", "weight", "manufacturer", "category", "details", "notes", "dimensions", "pdf_blob"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -3772,6 +5252,32 @@ func (ec *executionContext) unmarshalInputItemInput(ctx context.Context, obj int
 				return it, err
 			}
 			it.Category = data
+		case "details":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("details"))
+			directive0 := func(ctx context.Context) (interface{}, error) {
+				return ec.unmarshalOCategoryDetailsInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐCategoryDetailsInput(ctx, v)
+			}
+			directive1 := func(ctx context.Context) (interface{}, error) {
+				if ec.directives.OneOf == nil {
+					return nil, errors.New("directive oneOf is not implemented")
+				}
+				return ec.directives.OneOf(ctx, obj, directive0)
+			}
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*model.CategoryDetailsInput); ok {
+				it.Details = data
+			} else if tmp == nil {
+				it.Details = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *github.com/michaelaboah/sonic-sync-cloud/graph/model.CategoryDetailsInput`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "notes":
 			var err error
 
@@ -3799,6 +5305,89 @@ func (ec *executionContext) unmarshalInputItemInput(ctx context.Context, obj int
 				return it, err
 			}
 			it.PDFBlob = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputPowerInput(ctx context.Context, obj interface{}) (model.PowerInput, error) {
+	var it model.PowerInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"lower_voltage", "upper_voltage", "wattage", "max_wattage", "redundant", "input_connector", "output_connector"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "lower_voltage":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lower_voltage"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LowerVoltage = data
+		case "upper_voltage":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("upper_voltage"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpperVoltage = data
+		case "wattage":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("wattage"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Wattage = data
+		case "max_wattage":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("max_wattage"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxWattage = data
+		case "redundant":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("redundant"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Redundant = data
+		case "input_connector":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input_connector"))
+			data, err := ec.unmarshalNPowerConnector2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerConnector(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InputConnector = data
+		case "output_connector":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("output_connector"))
+			data, err := ec.unmarshalOPowerConnector2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerConnector(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OutputConnector = data
 		}
 	}
 
@@ -3847,9 +5436,139 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _CategoryDetails(ctx context.Context, sel ast.SelectionSet, obj model.CategoryDetails) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case model.Console:
+		return ec._Console(ctx, sel, &obj)
+	case *model.Console:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Console(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var consoleImplementors = []string{"Console", "CategoryDetails"}
+
+func (ec *executionContext) _Console(ctx context.Context, sel ast.SelectionSet, obj *model.Console) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, consoleImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Console")
+		case "total_inputs":
+			out.Values[i] = ec._Console_total_inputs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "total_outputs":
+			out.Values[i] = ec._Console_total_outputs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "total_busses":
+			out.Values[i] = ec._Console_total_busses(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "physical_inputs":
+			out.Values[i] = ec._Console_physical_inputs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "physical_outputs":
+			out.Values[i] = ec._Console_physical_outputs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "aux_inputs":
+			out.Values[i] = ec._Console_aux_inputs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "physical_aux_inputs":
+			out.Values[i] = ec._Console_physical_aux_inputs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "phantom_power_inputs":
+			out.Values[i] = ec._Console_phantom_power_inputs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "faders":
+			out.Values[i] = ec._Console_faders(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "motorized":
+			out.Values[i] = ec._Console_motorized(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "midi":
+			out.Values[i] = ec._Console_midi(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "protocol_inputs":
+			out.Values[i] = ec._Console_protocol_inputs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "signal_protocol":
+			out.Values[i] = ec._Console_signal_protocol(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "can_expand":
+			out.Values[i] = ec._Console_can_expand(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "max_sample_rate":
+			out.Values[i] = ec._Console_max_sample_rate(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "power":
+			out.Values[i] = ec._Console_power(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
 
 var dimensionImplementors = []string{"Dimension"}
 
@@ -3951,6 +5670,8 @@ func (ec *executionContext) _Item(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "details":
+			out.Values[i] = ec._Item_details(ctx, field, obj)
 		case "notes":
 			out.Values[i] = ec._Item_notes(ctx, field, obj)
 		case "dimensions":
@@ -4020,6 +5741,63 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var powerImplementors = []string{"Power"}
+
+func (ec *executionContext) _Power(ctx context.Context, sel ast.SelectionSet, obj *model.Power) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, powerImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Power")
+		case "lower_voltage":
+			out.Values[i] = ec._Power_lower_voltage(ctx, field, obj)
+		case "upper_voltage":
+			out.Values[i] = ec._Power_upper_voltage(ctx, field, obj)
+		case "wattage":
+			out.Values[i] = ec._Power_wattage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "max_wattage":
+			out.Values[i] = ec._Power_max_wattage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "redundant":
+			out.Values[i] = ec._Power_redundant(ctx, field, obj)
+		case "input_connector":
+			out.Values[i] = ec._Power_input_connector(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "output_connector":
+			out.Values[i] = ec._Power_output_connector(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4608,6 +6386,21 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) marshalNItem2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐItem(ctx context.Context, sel ast.SelectionSet, v model.Item) graphql.Marshaler {
 	return ec._Item(ctx, sel, &v)
 }
@@ -4707,6 +6500,61 @@ func (ec *executionContext) marshalNItem2ᚖgithubᚗcomᚋmichaelaboahᚋsonic�
 func (ec *executionContext) unmarshalNItemInput2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐItemInput(ctx context.Context, v interface{}) (model.ItemInput, error) {
 	res, err := ec.unmarshalInputItemInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNMidiType2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐMidiType(ctx context.Context, v interface{}) (model.MidiType, error) {
+	var res model.MidiType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMidiType2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐMidiType(ctx context.Context, sel ast.SelectionSet, v model.MidiType) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) marshalNPower2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPower(ctx context.Context, sel ast.SelectionSet, v *model.Power) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Power(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNPowerConnector2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerConnector(ctx context.Context, v interface{}) (model.PowerConnector, error) {
+	var res model.PowerConnector
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPowerConnector2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerConnector(ctx context.Context, sel ast.SelectionSet, v model.PowerConnector) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNPowerInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerInput(ctx context.Context, v interface{}) (*model.PowerInput, error) {
+	res, err := ec.unmarshalInputPowerInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNProtocol2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐProtocol(ctx context.Context, v interface{}) (model.Protocol, error) {
+	var res model.Protocol
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNProtocol2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐProtocol(ctx context.Context, sel ast.SelectionSet, v model.Protocol) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNSampleRate2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐSampleRate(ctx context.Context, v interface{}) (model.SampleRate, error) {
+	var res model.SampleRate
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSampleRate2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐSampleRate(ctx context.Context, sel ast.SelectionSet, v model.SampleRate) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -5066,6 +6914,29 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) marshalOCategoryDetails2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐCategoryDetails(ctx context.Context, sel ast.SelectionSet, v model.CategoryDetails) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._CategoryDetails(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOCategoryDetailsInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐCategoryDetailsInput(ctx context.Context, v interface{}) (*model.CategoryDetailsInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCategoryDetailsInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOConsoleInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐConsoleInput(ctx context.Context, v interface{}) (*model.ConsoleInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputConsoleInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalODimension2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐDimension(ctx context.Context, sel ast.SelectionSet, v *model.Dimension) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -5081,11 +6952,43 @@ func (ec *executionContext) unmarshalODimensionInput2ᚖgithubᚗcomᚋmichaelab
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel ast.SelectionSet, v *float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalFloatContext(*v)
+	return graphql.WrapContextMarshaler(ctx, res)
+}
+
 func (ec *executionContext) marshalOItem2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐItem(ctx context.Context, sel ast.SelectionSet, v *model.Item) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Item(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOPowerConnector2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerConnector(ctx context.Context, v interface{}) (*model.PowerConnector, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.PowerConnector)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPowerConnector2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerConnector(ctx context.Context, sel ast.SelectionSet, v *model.PowerConnector) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

@@ -1,26 +1,53 @@
+
 input ConsoleInput {
-  totalInputs: Int!
-  totalOutputs: Int!
-  totalBusses: Int!
-  physicalInputs: Int!
-  physicalOutputs: Int!
-  auxInputs: Int!
-  physicalAuxInputs: Int!
-  phantomPowerInputs: Int!
+  total_inputs: Int!
+  total_outputs: Int!
+  total_busses: Int!
+  physical_inputs: Int!
+  physical_outputs: Int!
+  aux_inputs: Int!
+  physical_aux_inputs: Int!
+  phantom_power_inputs: Int!
   faders: Int!
   motorized: Boolean!
   midi: MidiType!
-  protocolInputs: Int!
-  signalProtocol: Protocol!
+  protocol_inputs: Int!
+  signal_protocol: Protocol!
   can_expand: Boolean!
   max_sample_rate: SampleRate!
-  notes: [String!]!
-  model: String!
-  searchModel: String
-  power: ElectricalInput!
+  power: PowerInput!
 }
 
-input ElectricalInput {
+type Console {
+  total_inputs: Int!
+  total_outputs: Int!
+  total_busses: Int!
+  physical_inputs: Int!
+  physical_outputs: Int!
+  aux_inputs: Int!
+  physical_aux_inputs: Int!
+  phantom_power_inputs: Int!
+  faders: Int!
+  motorized: Boolean!
+  midi: MidiType!
+  protocol_inputs: Int!
+  signal_protocol: Protocol!
+  can_expand: Boolean!
+  max_sample_rate: SampleRate!
+  power: Power!
+}
+
+input PowerInput {
+  lower_voltage: Float
+  upper_voltage: Float
+  wattage: Float!
+  max_wattage: Float!
+  redundant: Boolean
+  input_connector: PowerConnector!
+  output_connector: PowerConnector
+}
+
+type Power {
   lower_voltage: Float
   upper_voltage: Float
   wattage: Float!
