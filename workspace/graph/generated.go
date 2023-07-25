@@ -4921,7 +4921,7 @@ func (ec *executionContext) unmarshalInputCategoryDetailsInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"console_input"}
+	fieldsInOrder := [...]string{"console_input", "test"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -4954,6 +4954,30 @@ func (ec *executionContext) unmarshalInputCategoryDetailsInput(ctx context.Conte
 				err := fmt.Errorf(`unexpected type %T from directive, should be *github.com/michaelaboah/sonic-sync-cloud/graph/model.ConsoleInput`, tmp)
 				return it, graphql.ErrorOnPath(ctx, err)
 			}
+		case "test":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("test"))
+			directive0 := func(ctx context.Context) (interface{}, error) { return ec.unmarshalOInt2ᚖint(ctx, v) }
+			directive1 := func(ctx context.Context) (interface{}, error) {
+				if ec.directives.OneOf == nil {
+					return nil, errors.New("directive oneOf is not implemented")
+				}
+				return ec.directives.OneOf(ctx, obj, directive0)
+			}
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*int); ok {
+				it.Test = data
+			} else if tmp == nil {
+				it.Test = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *int`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		}
 	}
 
@@ -4967,7 +4991,7 @@ func (ec *executionContext) unmarshalInputConsoleInput(ctx context.Context, obj 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"total_inputs", "total_outputs", "total_busses", "physical_inputs", "physical_outputs", "aux_inputs", "physical_aux_inputs", "phantom_power_inputs", "faders", "motorized", "midi", "protocol_inputs", "signal_protocol", "can_expand", "max_sample_rate", "power"}
+	fieldsInOrder := [...]string{"total_inputs", "total_outputs", "total_busses", "physical_inputs", "physical_outputs", "aux_inputs", "physical_aux_inputs", "phantom_power_inputs", "faders", "motorized", "midi", "protocol_inputs", "signal_protocol", "can_expand", "max_sample_rate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -5109,15 +5133,6 @@ func (ec *executionContext) unmarshalInputConsoleInput(ctx context.Context, obj 
 				return it, err
 			}
 			it.MaxSampleRate = data
-		case "power":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("power"))
-			data, err := ec.unmarshalNPowerInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Power = data
 		}
 	}
 
@@ -6532,11 +6547,6 @@ func (ec *executionContext) marshalNPowerConnector2githubᚗcomᚋmichaelaboah�
 	return v
 }
 
-func (ec *executionContext) unmarshalNPowerInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerInput(ctx context.Context, v interface{}) (*model.PowerInput, error) {
-	res, err := ec.unmarshalInputPowerInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNProtocol2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐProtocol(ctx context.Context, v interface{}) (model.Protocol, error) {
 	var res model.Protocol
 	err := res.UnmarshalGQL(v)
@@ -6966,6 +6976,22 @@ func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel as
 	}
 	res := graphql.MarshalFloatContext(*v)
 	return graphql.WrapContextMarshaler(ctx, res)
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalInt(*v)
+	return res
 }
 
 func (ec *executionContext) marshalOItem2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐItem(ctx context.Context, sel ast.SelectionSet, v *model.Item) graphql.Marshaler {

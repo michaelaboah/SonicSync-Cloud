@@ -14,6 +14,7 @@ type CategoryDetails interface {
 
 type CategoryDetailsInput struct {
 	ConsoleInput *ConsoleInput `json:"console_input,omitempty"`
+	Test         *int          `json:"test,omitempty"`
 }
 
 type Console struct {
@@ -38,22 +39,21 @@ type Console struct {
 func (Console) IsCategoryDetails() {}
 
 type ConsoleInput struct {
-	TotalInputs        int         `json:"total_inputs"`
-	TotalOutputs       int         `json:"total_outputs"`
-	TotalBusses        int         `json:"total_busses"`
-	PhysicalInputs     int         `json:"physical_inputs"`
-	PhysicalOutputs    int         `json:"physical_outputs"`
-	AuxInputs          int         `json:"aux_inputs"`
-	PhysicalAuxInputs  int         `json:"physical_aux_inputs"`
-	PhantomPowerInputs int         `json:"phantom_power_inputs"`
-	Faders             int         `json:"faders"`
-	Motorized          bool        `json:"motorized"`
-	Midi               MidiType    `json:"midi"`
-	ProtocolInputs     int         `json:"protocol_inputs"`
-	SignalProtocol     Protocol    `json:"signal_protocol"`
-	CanExpand          bool        `json:"can_expand"`
-	MaxSampleRate      SampleRate  `json:"max_sample_rate"`
-	Power              *PowerInput `json:"power"`
+	TotalInputs        int        `json:"total_inputs"`
+	TotalOutputs       int        `json:"total_outputs"`
+	TotalBusses        int        `json:"total_busses"`
+	PhysicalInputs     int        `json:"physical_inputs"`
+	PhysicalOutputs    int        `json:"physical_outputs"`
+	AuxInputs          int        `json:"aux_inputs"`
+	PhysicalAuxInputs  int        `json:"physical_aux_inputs"`
+	PhantomPowerInputs int        `json:"phantom_power_inputs"`
+	Faders             int        `json:"faders"`
+	Motorized          bool       `json:"motorized"`
+	Midi               MidiType   `json:"midi"`
+	ProtocolInputs     int        `json:"protocol_inputs"`
+	SignalProtocol     Protocol   `json:"signal_protocol"`
+	CanExpand          bool       `json:"can_expand"`
+	MaxSampleRate      SampleRate `json:"max_sample_rate"`
 }
 
 type Dimension struct {

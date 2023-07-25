@@ -75,3 +75,26 @@
 2023/07/25 14:27:00.818480 server.go:41: Log file created
 2023/07/25 14:27:00.818527 database.go:21: MONGODB_URL not specified in .env file
 2023/07/25 14:27:31.627660 server.go:44: Log file created
+2023/07/25 14:33:41.597728 server.go:42: Log file created
+2023/07/25 14:49:14.429102 server.go:42: Log file created
+2023/07/25 14:51:15.757301 server.go:42: Log file created
+2023/07/25 14:53:21.055946 server.go:42: Log file created
+2023/07/25 14:53:45.226674 server.go:42: Log file created
+2023/07/25 15:01:29.832143 server.go:42: Log file created
+2023/07/25 15:01:50.889631 server.go:42: Log file created
+2023/07/25 15:02:23.211930 server.go:42: Log file created
+2023/07/25 15:08:44.078012 server.go:42: Log file created
+2023/07/25 15:18:33.942196 server.go:42: Log file created
+2023/07/25 15:20:03.934283 server.go:42: Log file created
+2023/07/25 15:21:16.726307 server.go:42: Log file created
+2023/07/25 15:21:33.638303 server.go:42: Log file created
+2023/07/25 15:24:05.876346 server.go:42: Log file created
+2023/07/25 15:25:27.970726 server.go:42: Log file created
+2023/07/25 15:31:45.176946 server.go:42: Log file created
+2023/07/25 15:32:25.433713 server.go:42: Log file created
+2023/07/25 15:33:17.101053 server.go:42: Log file created
+2023/07/25 15:33:17.527536 server.go:68: listen tcp :8080: bind: address already in use
+2023/07/25 15:33:28.968271 server.go:42: Log file created
+2023/07/25 15:33:59.728799 server.go:42: Log file created
+2023/07/25 15:36:00.088161 server.go:42: Log file created
+2023/07/25 15:38:06.939403 server.go:42: Log file created

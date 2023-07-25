@@ -53,7 +53,8 @@ input DimensionInput {
 }
 
 input CategoryDetailsInput @oneOf {
-  console_input: ConsoleInput 
+  console_input: ConsoleInput
+  test: Int
 }
 
 union CategoryDetails = Console

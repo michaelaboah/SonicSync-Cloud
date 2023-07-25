@@ -1,16 +1,26 @@
 package handlers
 
 import (
+	"context"
+	// "encoding/json"
+	"errors"
+	// "fmt"
+
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
+
+	// "github.com/jacoz/gqlgen-oneof-directive/pkg/oneof"
 	"github.com/michaelaboah/sonic-sync-cloud/graph"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func GrapqhlHandler(mongoClient *mongo.Client) gin.HandlerFunc  {
-    
-  h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{DB: mongoClient}}))
+  c := graph.Config{Resolvers: &graph.Resolver{DB: mongoClient}}
+  c.Directives.OneOf = Directive
+
+  h := handler.NewDefaultServer(graph.NewExecutableSchema(c))
 
   return func(ctx *gin.Context) {
     h.ServeHTTP(ctx.Writer, ctx.Request)
@@ -28,4 +38,29 @@ func PlaygroundHandler() gin.HandlerFunc  {
     
   }
 
+}
+
+var (
+	ErrNoOptionSelected       = errors.New("one option must be selected")
+	ErrTooManyOptionsSelected = errors.New("maximum one option can be selected")
+)
+
+func Directive(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
+	val, err := next(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	v := obj.(map[string]interface{})
+  // jsonStr, _ := json.Marshal(v)
+  // fmt.Println(v)
+	c := len(v)
+  println(c)
+	if c == 0 {
+		return nil, ErrNoOptionSelected
+	} else if c > 1 {
+		return nil, ErrTooManyOptionsSelected
+	}
+
+	return val, nil
 }

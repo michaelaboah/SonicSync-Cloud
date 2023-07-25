@@ -20,6 +20,7 @@ func DBInstance() *mongo.Client {
     log.Fatalln("MONGODB_URL not specified in .env file")
   }
 
+  
   serverAPI := options.ServerAPI(options.ServerAPIVersion1)
   opts := options.Client().ApplyURI(mongoURL).SetServerAPIOptions(serverAPI)
 
