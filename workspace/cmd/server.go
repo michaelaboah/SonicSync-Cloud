@@ -17,11 +17,7 @@ import (
 const defaultPort = "8080"
 const defaultLogPath = "./logs/log.log"
 func main() {
-
-
   godotenv.Load("../workspace/.env")
-
-
 
 	port := os.Getenv("PORT")
   fmt.Println(port)
@@ -47,8 +43,6 @@ func main() {
 
   r := gin.Default()
 
-
-  
 
   r.Use(middleware.DbMiddleware(mongoClient))
 

@@ -1,0 +1,94 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+directive @oneOf on INPUT_OBJECT
+
+scalar ObjectID
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+}
+
+input UserInput {
+  name: String!
+  email: String!
+}
+
+type Query {
+  users: [User!]!
+  items: [Item!]!
+  find_by_model: [Item]!
+  find_by_id: Item
+}
+
+
+type Mutation {
+  createUser(input: UserInput!): User!
+  createItem(input: ItemInput!, details: CategoryDetailsInput): Item!
+  updateItem(input: ItemInput!): Item!
+}
+
+
+input ItemInput {
+  created_at: String!
+  updated_at: String!
+  cost: Float!
+  model: String!
+  weight: Float!
+  manufacturer: String! 
+  category: Category! = GENERIC
+  notes: String
+  dimensions: DimensionInput
+  pdf_blob: String
+}
+
+input DimensionInput {
+  length: Float!
+  width: Float!
+  height: Float!
+}
+
+input CategoryDetailsInput @oneOf {
+  console_input: ConsoleInput
+}
+
+union CategoryDetails = Console
+
+type Item {
+  id: ObjectID!
+  created_at: String!
+  updated_at: String!
+  cost: Float!
+  model: String!
+  weight: Float!
+  manufacturer: String! 
+  category: Category!
+  details: CategoryDetails 
+  notes: String
+  dimensions: Dimension
+  pdf_blob: String
+}
+
+type Dimension {
+  length: Float!
+  width: Float!
+  height: Float!
+}
+
+
+enum Category {
+  CONSOLE,
+  PROCESSOR,
+  MONITORING,
+  SPEAKER,
+  AMPLIFIER,
+  COMPUTER,
+  NETWORK,
+  RADIO,
+  MICROPHONES,
+  SPK_HARDWARE,
+  GENERIC
+}

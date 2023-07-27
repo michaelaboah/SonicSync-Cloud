@@ -15,7 +15,7 @@ input ConsoleInput {
   signal_protocol: Protocol!
   can_expand: Boolean!
   max_sample_rate: SampleRate!
-  # power: PowerInput
+  power: PowerInput
 }
 
 type Console {

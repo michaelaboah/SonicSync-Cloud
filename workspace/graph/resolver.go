@@ -1,4 +1,4 @@
-//go:generate go run github.com/99designs/gqlgen generate
+//go:generate go run generate.go
 package graph
 
 import (

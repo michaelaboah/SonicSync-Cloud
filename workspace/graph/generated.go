@@ -17,6 +17,7 @@ import (
 	"github.com/michaelaboah/sonic-sync-cloud/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -87,7 +88,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateItem func(childComplexity int, input model.ItemInput) int
+		CreateItem func(childComplexity int, input model.ItemInput, details *model.CategoryDetailsInput) int
 		CreateUser func(childComplexity int, input model.UserInput) int
 		UpdateItem func(childComplexity int, input model.ItemInput) int
 	}
@@ -118,7 +119,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreateUser(ctx context.Context, input model.UserInput) (*model.User, error)
-	CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error)
+	CreateItem(ctx context.Context, input model.ItemInput, details *model.CategoryDetailsInput) (*model.Item, error)
 	UpdateItem(ctx context.Context, input model.ItemInput) (*model.Item, error)
 }
 type QueryResolver interface {
@@ -370,7 +371,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateItem(childComplexity, args["input"].(model.ItemInput)), true
+		return e.complexity.Mutation.CreateItem(childComplexity, args["input"].(model.ItemInput), args["details"].(*model.CategoryDetailsInput)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -604,7 +605,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
-//go:embed "schema.graphqls" "schemas/category_details.graphqls" "schemas/enums.graphqls"
+//go:embed "schemas/category_details.graphqls" "schemas/enums.graphqls" "schemas/schema.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -616,9 +617,9 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
-	{Name: "schema.graphqls", Input: sourceData("schema.graphqls"), BuiltIn: false},
 	{Name: "schemas/category_details.graphqls", Input: sourceData("schemas/category_details.graphqls"), BuiltIn: false},
 	{Name: "schemas/enums.graphqls", Input: sourceData("schemas/enums.graphqls"), BuiltIn: false},
+	{Name: "schemas/schema.graphqls", Input: sourceData("schemas/schema.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -638,6 +639,15 @@ func (ec *executionContext) field_Mutation_createItem_args(ctx context.Context, 
 		}
 	}
 	args["input"] = arg0
+	var arg1 *model.CategoryDetailsInput
+	if tmp, ok := rawArgs["details"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("details"))
+		arg1, err = ec.unmarshalOCategoryDetailsInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐCategoryDetailsInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["details"] = arg1
 	return args, nil
 }
 
@@ -1602,9 +1612,9 @@ func (ec *executionContext) _Item_id(ctx context.Context, field graphql.Collecte
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(primitive.ObjectID)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNObjectID2goᚗmongodbᚗorgᚋmongoᚑdriverᚋbsonᚋprimitiveᚐObjectID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Item_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1614,7 +1624,7 @@ func (ec *executionContext) fieldContext_Item_id(ctx context.Context, field grap
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
+			return nil, errors.New("field of type ObjectID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2177,7 +2187,7 @@ func (ec *executionContext) _Mutation_createItem(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateItem(rctx, fc.Args["input"].(model.ItemInput))
+		return ec.resolvers.Mutation().CreateItem(rctx, fc.Args["input"].(model.ItemInput), fc.Args["details"].(*model.CategoryDetailsInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4921,7 +4931,7 @@ func (ec *executionContext) unmarshalInputCategoryDetailsInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"console_input", "test"}
+	fieldsInOrder := [...]string{"console_input"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -4954,30 +4964,6 @@ func (ec *executionContext) unmarshalInputCategoryDetailsInput(ctx context.Conte
 				err := fmt.Errorf(`unexpected type %T from directive, should be *github.com/michaelaboah/sonic-sync-cloud/graph/model.ConsoleInput`, tmp)
 				return it, graphql.ErrorOnPath(ctx, err)
 			}
-		case "test":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("test"))
-			directive0 := func(ctx context.Context) (interface{}, error) { return ec.unmarshalOInt2ᚖint(ctx, v) }
-			directive1 := func(ctx context.Context) (interface{}, error) {
-				if ec.directives.OneOf == nil {
-					return nil, errors.New("directive oneOf is not implemented")
-				}
-				return ec.directives.OneOf(ctx, obj, directive0)
-			}
-
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return it, graphql.ErrorOnPath(ctx, err)
-			}
-			if data, ok := tmp.(*int); ok {
-				it.Test = data
-			} else if tmp == nil {
-				it.Test = nil
-			} else {
-				err := fmt.Errorf(`unexpected type %T from directive, should be *int`, tmp)
-				return it, graphql.ErrorOnPath(ctx, err)
-			}
 		}
 	}
 
@@ -4991,7 +4977,7 @@ func (ec *executionContext) unmarshalInputConsoleInput(ctx context.Context, obj 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"total_inputs", "total_outputs", "total_busses", "physical_inputs", "physical_outputs", "aux_inputs", "physical_aux_inputs", "phantom_power_inputs", "faders", "motorized", "midi", "protocol_inputs", "signal_protocol", "can_expand", "max_sample_rate"}
+	fieldsInOrder := [...]string{"total_inputs", "total_outputs", "total_busses", "physical_inputs", "physical_outputs", "aux_inputs", "physical_aux_inputs", "phantom_power_inputs", "faders", "motorized", "midi", "protocol_inputs", "signal_protocol", "can_expand", "max_sample_rate", "power"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -5133,6 +5119,15 @@ func (ec *executionContext) unmarshalInputConsoleInput(ctx context.Context, obj 
 				return it, err
 			}
 			it.MaxSampleRate = data
+		case "power":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("power"))
+			data, err := ec.unmarshalOPowerInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Power = data
 		}
 	}
 
@@ -5197,7 +5192,7 @@ func (ec *executionContext) unmarshalInputItemInput(ctx context.Context, obj int
 		asMap["category"] = "GENERIC"
 	}
 
-	fieldsInOrder := [...]string{"created_at", "updated_at", "cost", "model", "weight", "manufacturer", "category", "details", "notes", "dimensions", "pdf_blob"}
+	fieldsInOrder := [...]string{"created_at", "updated_at", "cost", "model", "weight", "manufacturer", "category", "notes", "dimensions", "pdf_blob"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -5267,32 +5262,6 @@ func (ec *executionContext) unmarshalInputItemInput(ctx context.Context, obj int
 				return it, err
 			}
 			it.Category = data
-		case "details":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("details"))
-			directive0 := func(ctx context.Context) (interface{}, error) {
-				return ec.unmarshalOCategoryDetailsInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐCategoryDetailsInput(ctx, v)
-			}
-			directive1 := func(ctx context.Context) (interface{}, error) {
-				if ec.directives.OneOf == nil {
-					return nil, errors.New("directive oneOf is not implemented")
-				}
-				return ec.directives.OneOf(ctx, obj, directive0)
-			}
-
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return it, graphql.ErrorOnPath(ctx, err)
-			}
-			if data, ok := tmp.(*model.CategoryDetailsInput); ok {
-				it.Details = data
-			} else if tmp == nil {
-				it.Details = nil
-			} else {
-				err := fmt.Errorf(`unexpected type %T from directive, should be *github.com/michaelaboah/sonic-sync-cloud/graph/model.CategoryDetailsInput`, tmp)
-				return it, graphql.ErrorOnPath(ctx, err)
-			}
 		case "notes":
 			var err error
 
@@ -6527,6 +6496,21 @@ func (ec *executionContext) marshalNMidiType2githubᚗcomᚋmichaelaboahᚋsonic
 	return v
 }
 
+func (ec *executionContext) unmarshalNObjectID2goᚗmongodbᚗorgᚋmongoᚑdriverᚋbsonᚋprimitiveᚐObjectID(ctx context.Context, v interface{}) (primitive.ObjectID, error) {
+	res, err := UnmarshalObjectID(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNObjectID2goᚗmongodbᚗorgᚋmongoᚑdriverᚋbsonᚋprimitiveᚐObjectID(ctx context.Context, sel ast.SelectionSet, v primitive.ObjectID) graphql.Marshaler {
+	res := MarshalObjectID(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) marshalNPower2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPower(ctx context.Context, sel ast.SelectionSet, v *model.Power) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -6978,22 +6962,6 @@ func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel as
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 
-func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalInt(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	res := graphql.MarshalInt(*v)
-	return res
-}
-
 func (ec *executionContext) marshalOItem2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐItem(ctx context.Context, sel ast.SelectionSet, v *model.Item) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -7015,6 +6983,14 @@ func (ec *executionContext) marshalOPowerConnector2ᚖgithubᚗcomᚋmichaelaboa
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) unmarshalOPowerInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐPowerInput(ctx context.Context, v interface{}) (*model.PowerInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputPowerInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

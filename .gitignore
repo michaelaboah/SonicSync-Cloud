@@ -1,2 +1,4 @@
-.env
-./workspace/server
+/workspace/.env
+/workspace/server
+/workspace/tmp/
+/workspace/.air.toml

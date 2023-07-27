@@ -8,12 +8,14 @@ import (
 	"context"
 	"fmt"
 
+	pkgDB "github.com/michaelaboah/sonic-sync-cloud/database"
 	"github.com/michaelaboah/sonic-sync-cloud/graph/model"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
-	items := r.DB.Database(ClientsDB).Collection(UserCol)
+	users := r.DB.Database(pkgDB.ClientsDB).Collection(pkgDB.UserCol)
 
 	user := &model.User{
 		ID:    "0",
@@ -21,23 +23,21 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput
 		Email: input.Email,
 	}
 
-	items.InsertOne(ctx, user)
+	users.InsertOne(ctx, user)
 	return user, nil
 }
 
 // CreateItem is the resolver for the createItem field.
-func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
-	var details model.CategoryDetails
+func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput, details *model.CategoryDetailsInput) (*model.Item, error) {
+	var cat_details model.CategoryDetails
 
-	fmt.Println(input.Details.ConsoleInput)
-	// switch input.Category {
-	// case model.CategoryConsole:
-	// 	details = input.Details.ConsoleInput
-	//    fmt.Println(details)
-	// }
+	switch input.Category {
+	case model.CategoryConsole:
+		cat_details = details.ConsoleInput
+	}
 
+	items := r.DB.Database(pkgDB.EquipDB).Collection(pkgDB.ItemsCol)
 	item := &model.Item{
-		ID:           "",
 		CreatedAt:    input.CreatedAt,
 		UpdatedAt:    input.UpdatedAt,
 		Cost:         input.Cost,
@@ -45,13 +45,13 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 		Weight:       input.Weight,
 		Manufacturer: input.Manufacturer,
 		Category:     input.Category,
-		Details:      details,
+		Details:      cat_details,
 		Notes:        &input.Model,
 		Dimensions:   (*model.Dimension)(input.Dimensions),
 		PDFBlob:      input.PDFBlob,
 	}
-
-	r.items = append(r.items, item)
+	items.InsertOne(ctx, item)
+	// r.items = append(r.items, item)
 	return item, nil
 }
 
@@ -62,12 +62,43 @@ func (r *mutationResolver) UpdateItem(ctx context.Context, input model.ItemInput
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	usersCollection := r.DB.Database(pkgDB.ClientsDB).Collection(pkgDB.UserCol)
+
+	usersCursor, err := usersCollection.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(usersCursor)
+	// usersCursor.A
+	return nil, nil
 }
 
 // Items is the resolver for the items field.
 func (r *queryResolver) Items(ctx context.Context) ([]*model.Item, error) {
-	panic(fmt.Errorf("not implemented: Items - items"))
+	itemsCollection := r.DB.Database(pkgDB.EquipDB).Collection(pkgDB.ItemsCol)
+
+	itemsCursor, err := itemsCollection.Find(ctx, bson.M{})
+
+	if err != nil {
+		return nil, err
+	}
+
+	var results []*model.Item
+
+  for itemsCursor.Next(ctx) {
+    var elem map[string]interface{} 
+    
+    itemsCursor.Decode(&elem)
+
+    fmt.Println(elem) 
+
+  }
+
+
+	// fmt.Println(results)
+
+	return results, nil
 }
 
 // FindByModel is the resolver for the find_by_model field.
@@ -88,14 +119,3 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.
-const ClientsDB = "clients-db"
-const UserCol = "users"
-const EquipDB = "equipment-inventory"
-const ItemsCol = "items"

@@ -98,3 +98,90 @@
 2023/07/25 15:33:59.728799 server.go:42: Log file created
 2023/07/25 15:36:00.088161 server.go:42: Log file created
 2023/07/25 15:38:06.939403 server.go:42: Log file created
+2023/07/25 16:21:31.028245 server.go:42: Log file created
+2023/07/25 16:22:56.066469 server.go:42: Log file created
+2023/07/25 16:28:09.828019 server.go:42: Log file created
+2023/07/25 16:29:47.672147 server.go:42: Log file created
+2023/07/25 16:31:01.668434 server.go:42: Log file created
+2023/07/25 16:32:56.834008 server.go:42: Log file created
+2023/07/25 16:33:25.223153 server.go:42: Log file created
+2023/07/25 16:41:58.931910 server.go:42: Log file created
+2023/07/25 16:43:26.225141 server.go:42: Log file created
+2023/07/25 20:38:32.223935 server.go:42: Log file created
+2023/07/25 20:41:09.266715 server.go:42: Log file created
+2023/07/25 20:43:15.948899 server.go:42: Log file created
+2023/07/25 20:47:39.160014 server.go:42: Log file created
+2023/07/26 12:08:49.371374 server.go:42: Log file created
+2023/07/26 12:53:22.424164 server.go:38: Log file created
+2023/07/26 12:54:16.504175 server.go:38: Log file created
+2023/07/26 12:58:28.106434 server.go:38: Log file created
+2023/07/26 12:58:28.524100 mongo.go:46: Connection to Mongo Database Sucessful
+2023/07/26 12:58:28.524145 mongo.go:49: Starting Database Setup and Pre-Checks
+2023/07/26 20:07:01.108613 server.go:38: Log file created
+2023/07/26 20:07:01.108663 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/26 20:07:01.715995 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/26 20:07:01.716049 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/26 20:12:05.220609 server.go:38: Log file created
+2023/07/26 20:12:05.220727 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/26 20:12:05.698826 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/26 20:12:05.698888 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/26 20:12:52.117164 server.go:38: Log file created
+2023/07/26 20:12:52.117207 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/26 20:12:52.462917 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/26 20:12:52.462962 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/26 20:13:17.185118 server.go:38: Log file created
+2023/07/26 20:13:17.185162 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/26 20:13:17.689975 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/26 20:13:17.690016 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/26 20:18:03.039566 server.go:38: Log file created
+2023/07/26 20:18:03.039621 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/26 20:18:03.547002 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/26 20:18:03.547046 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/26 20:18:52.745395 server.go:38: Log file created
+2023/07/26 20:18:52.745439 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/26 20:18:53.089396 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/26 20:18:53.089441 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/26 20:19:34.315776 server.go:38: Log file created
+2023/07/26 20:19:34.315830 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/26 20:19:34.838790 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/26 20:19:34.838836 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/26 20:23:46.086237 server.go:38: Log file created
+2023/07/26 20:23:46.086282 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/26 20:23:46.608040 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/26 20:23:46.608082 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/27 10:28:48.836914 server.go:38: Log file created
+2023/07/27 10:28:48.836966 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/27 10:28:49.248279 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/27 10:28:49.248308 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/27 10:37:07.417240 server.go:38: Log file created
+2023/07/27 10:37:07.417283 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/27 10:37:07.804453 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/27 10:37:07.804485 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/27 11:23:13.553631 server.go:38: Log file created
+2023/07/27 11:23:13.553673 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/27 11:23:14.071150 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/27 11:23:14.071184 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/27 11:24:09.732334 server.go:38: Log file created
+2023/07/27 11:24:09.732378 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/27 11:24:10.030758 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/27 11:24:10.030795 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/27 15:28:43.525471 server.go:38: Log file created
+2023/07/27 15:28:43.525516 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/27 15:28:44.023178 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/27 15:28:44.023217 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/27 15:46:36.014866 server.go:38: Log file created
+2023/07/27 15:46:36.014908 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/27 15:46:36.500460 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/27 15:46:36.500491 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/27 15:53:09.012408 server.go:38: Log file created
+2023/07/27 15:53:09.012468 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/27 15:53:09.428342 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/27 15:53:09.428387 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/27 17:29:18.935439 server.go:38: Log file created
+2023/07/27 17:29:18.935487 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/27 17:29:19.350744 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/27 17:29:19.350782 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks
+2023/07/27 17:30:02.533801 server.go:38: Log file created
+2023/07/27 17:30:02.533851 mongo.go:22: [MongoDB] Starting Database Connection Instance
+2023/07/27 17:30:02.831223 mongo.go:51: [~ Status] Connection to Mongo Database Sucessful
+2023/07/27 17:30:02.831256 mongo.go:54: [~ Status] Starting Database Setup and Pre-Checks

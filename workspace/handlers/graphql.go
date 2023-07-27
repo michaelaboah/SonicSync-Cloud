@@ -2,9 +2,8 @@ package handlers
 
 import (
 	"context"
-	// "encoding/json"
 	"errors"
-	// "fmt"
+	"fmt"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -43,7 +42,9 @@ func PlaygroundHandler() gin.HandlerFunc  {
 var (
 	ErrNoOptionSelected       = errors.New("one option must be selected")
 	ErrTooManyOptionsSelected = errors.New("maximum one option can be selected")
+  ErrNotValidField = errors.New("Not a valid input field")
 )
+
 
 func Directive(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
 	val, err := next(ctx)
@@ -52,10 +53,8 @@ func Directive(ctx context.Context, obj interface{}, next graphql.Resolver) (res
 	}
 
 	v := obj.(map[string]interface{})
-  // jsonStr, _ := json.Marshal(v)
-  // fmt.Println(v)
+  fmt.Println(v)
 	c := len(v)
-  println(c)
 	if c == 0 {
 		return nil, ErrNoOptionSelected
 	} else if c > 1 {
