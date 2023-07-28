@@ -70,6 +70,11 @@ type DimensionInput struct {
 	Height float64 `json:"height" bson:"height"`
 }
 
+type Error struct {
+	Field   string `json:"field" bson:"field"`
+	Message string `json:"message" bson:"message"`
+}
+
 type Item struct {
 	ID           primitive.ObjectID `json:"id" bson:"_id"`
 	CreatedAt    string             `json:"created_at" bson:"created_at"`

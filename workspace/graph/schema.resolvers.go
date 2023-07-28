@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 
 	pkgDB "github.com/michaelaboah/sonic-sync-cloud/database"
 	"github.com/michaelaboah/sonic-sync-cloud/graph/model"
@@ -51,13 +52,8 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 		PDFBlob:      input.PDFBlob,
 	}
 	items.InsertOne(ctx, item)
-	// r.items = append(r.items, item)
+	
 	return item, nil
-}
-
-// UpdateItem is the resolver for the updateItem field.
-func (r *mutationResolver) UpdateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
-	panic(fmt.Errorf("not implemented: UpdateItem - updateItem"))
 }
 
 // Users is the resolver for the users field.
@@ -70,14 +66,13 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	}
 
 	fmt.Println(usersCursor)
-	// usersCursor.A
+
 	return nil, nil
 }
 
 // Items is the resolver for the items field.
 func (r *queryResolver) Items(ctx context.Context) ([]*model.Item, error) {
 	itemsCollection := r.DB.Database(pkgDB.EquipDB).Collection(pkgDB.ItemsCol)
-
 	itemsCursor, err := itemsCollection.Find(ctx, bson.M{})
 
 	if err != nil {
@@ -86,29 +81,73 @@ func (r *queryResolver) Items(ctx context.Context) ([]*model.Item, error) {
 
 	var results []*model.Item
 
-  for itemsCursor.Next(ctx) {
-    var elem map[string]interface{} 
-    
-    itemsCursor.Decode(&elem)
+	for itemsCursor.Next(ctx) {
+		var ( 
+     doc bson.M
+		 item *model.Item
+     err error
+    )
 
-    fmt.Println(elem) 
+		itemsCursor.Decode(&doc)
 
-  }
+		// Should be a better way to do this without needing to marshal to itemBytes and back
+		itemBytes, err := bson.Marshal(doc)
+    if err != nil {
+      log.Println("Error Marshaling BSON to bytes: ", err) 
+    }
 
+		detailsBytes, _ := bson.Marshal(doc["details"])
 
-	// fmt.Println(results)
+    err = bson.Unmarshal(itemBytes, &item); if err != nil {
+      log.Println(err)
+    }
 
+    details, err := model.MatchDetails(item.Category, detailsBytes); if err != nil {
+      log.Println("Error Unmarshaling bytes", err)
+    }
+
+    item.Details = details
+
+		results = append(results, item)
+
+	}
+  fmt.Println("Number of Items: ", len(results))
 	return results, nil
 }
 
 // FindByModel is the resolver for the find_by_model field.
-func (r *queryResolver) FindByModel(ctx context.Context) ([]*model.Item, error) {
-	panic(fmt.Errorf("not implemented: FindByModel - find_by_model"))
-}
+func (r *queryResolver) FindByModel(ctx context.Context, modelName string) (*model.Item, error) {
+	itemsCollection := r.DB.Database(pkgDB.EquipDB).Collection(pkgDB.ItemsCol)
+	itemResult := itemsCollection.FindOne(ctx, bson.M{"model": modelName})
 
-// FindByID is the resolver for the find_by_id field.
-func (r *queryResolver) FindByID(ctx context.Context) (*model.Item, error) {
-	panic(fmt.Errorf("not implemented: FindByID - find_by_id"))
+	var doc bson.M
+	var item *model.Item
+  var err error
+  
+	itemResult.Decode(&doc)
+  
+	itemBytes, err := bson.Marshal(doc)
+  if err != nil {
+    log.Println("Error Marshaling BSON to bytes: ", err) 
+  }
+
+
+  detailsBytes, err := bson.Marshal(doc["details"])
+  if err != nil {
+    log.Println("Error Marshal 'details' from mongo document: ", err) 
+  } 
+
+  err = bson.Unmarshal(itemBytes, &item); if err != nil {
+    log.Println(err)
+  }
+
+  details, err := model.MatchDetails(item.Category, detailsBytes); if err != nil {
+    log.Println("Error Unmarshaling bytes", err)
+  }
+
+  item.Details = details
+
+	return item, nil
 }
 
 // Mutation returns MutationResolver implementation.
@@ -119,3 +158,16 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *queryResolver) FindByID(ctx context.Context) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented: FindByID - find_by_id"))
+}
+func (r *mutationResolver) UpdateItem(ctx context.Context, input model.ItemInput) (*model.Item, error) {
+	panic(fmt.Errorf("not implemented: UpdateItem - updateItem"))
+}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -35,10 +36,16 @@ func main() {
 
   log.SetOutput(logFile)
   log.SetFlags(log.LstdFlags | log.Lshortfile | log.Lmicroseconds)
-  log.Println("Log file created")
+  log.Println("[Server] Log file created")
 
 
-  mongoClient := database.DBInstance()
+  mongoClient, err := database.DBInstance()
+
+  defer func() {
+      if err = mongoClient.Disconnect(context.TODO()); err != nil {
+        panic(err)
+      }
+    }()
   
 
   r := gin.Default()

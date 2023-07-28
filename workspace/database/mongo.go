@@ -16,7 +16,7 @@ const UserCol = "users"
 const EquipDB = "equipment-inventory"
 const ItemsCol = "items"
 
-func DBInstance() *mongo.Client {
+func DBInstance() (*mongo.Client, error) {
   
 
   log.Println("[MongoDB] Starting Database Connection Instance")
@@ -44,7 +44,7 @@ func DBInstance() *mongo.Client {
   err = client.Ping(context.Background(), nil)
   
   if err != nil {
-    log.Fatal(err) 
+    log.Println(err) 
   }
 
 
@@ -56,7 +56,10 @@ func DBInstance() *mongo.Client {
   // Setup + Pre-Check
   uniqueIndexs(client)
 
-  return client
+  
+
+
+  return client, err
 }
 
 

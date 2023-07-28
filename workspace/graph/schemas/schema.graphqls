@@ -20,15 +20,14 @@ input UserInput {
 type Query {
   users: [User!]!
   items: [Item!]!
-  find_by_model: [Item]!
-  find_by_id: Item
+  find_by_model(model_name: String!): Item!
 }
 
 
 type Mutation {
   createUser(input: UserInput!): User!
   createItem(input: ItemInput!, details: CategoryDetailsInput): Item!
-  updateItem(input: ItemInput!): Item!
+  # updateItem(input: ItemInput!): Item!
 }
 
 
@@ -79,16 +78,7 @@ type Dimension {
 }
 
 
-enum Category {
-  CONSOLE,
-  PROCESSOR,
-  MONITORING,
-  SPEAKER,
-  AMPLIFIER,
-  COMPUTER,
-  NETWORK,
-  RADIO,
-  MICROPHONES,
-  SPK_HARDWARE,
-  GENERIC
+type Error {
+  field: String!
+  message: String!
 }

@@ -54,3 +54,18 @@ enum Protocol {
   ULTRANET
   IP
 }
+
+
+enum Category {
+  CONSOLE,
+  PROCESSOR,
+  MONITORING,
+  SPEAKER,
+  AMPLIFIER,
+  COMPUTER,
+  NETWORK,
+  RADIO,
+  MICROPHONES,
+  SPK_HARDWARE,
+  GENERIC
+}
