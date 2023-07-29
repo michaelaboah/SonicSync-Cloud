@@ -1,4 +1,4 @@
-enum Categories {
+enum Category {
   CONSOLE
   PROCESSOR
   MONITORING
@@ -29,6 +29,12 @@ enum Analog {
   TS
   TRS
   TRRS
+  TRI_PIN_PHOENIX
+  DUAL_PIN_PHOENIX
+  NL2
+  NL4
+  NL8
+  DC_12V
 }
 
 enum PowerConnector {
@@ -43,6 +49,7 @@ enum PowerConnector {
   L6_30
   L6_50
   L6_60
+  # POE
 }
 
 enum Protocol {
@@ -52,20 +59,72 @@ enum Protocol {
   AVB_MILAN
   OPTOCORE
   ULTRANET
+  A_NET
   IP
 }
 
+enum ComputerConnKind {
+  USB_A,
+  USB_B,
+  USB_C,
+  HDMI,
+  MINI_HDMI,
+  DISPLAYPORT,
+  MINI_DISPLAYPORT,
+  MIRCO_B,
+  SD_CARD,
+  FIREWIRE,
+  USB_C_THUNDERBOLT,
+}
 
-enum Category {
-  CONSOLE,
-  PROCESSOR,
-  MONITORING,
-  SPEAKER,
-  AMPLIFIER,
-  COMPUTER,
-  NETWORK,
-  RADIO,
-  MICROPHONES,
-  SPK_HARDWARE,
-  GENERIC
+
+
+enum NetworkType {
+  SWITCH_MANAGED,
+  SWITCH_UNMANAGED,
+  ROUTER,
+  ACCESS_POINT,
+  ROUTER_SW_AP,
+  INJECTOR,
+  MODEM,
+  NIC,
+  REPEATER,
+  NETWORK_BRIDGE,
+}
+
+
+enum MicrophoneType {
+  PRE_POLORAIZED_CONDENSOR,
+  CONDENSOR,
+  RIBBON,
+  DYNAMIC,
+}
+
+enum PolarPattern {
+  SUPERCARDIOID,
+  CARDIOID,
+  OMNI,
+  HYPERCARDIOID,
+  FIGURE_8,
+}
+
+enum DiaphagmSize {
+  SMALL,
+  MED,
+  LARGE,
+}
+
+
+enum TransmitterConnector {
+  SHURE_TA4, #Shure
+  MICRODOT, #DPA
+  TRRS, #1/8
+  TRI_PIN, #Sennheiser
+}
+
+# Should be called something like NetworkTransferRate or other but not today
+enum NetworkSpeed {
+  SUPERSPEED #= 100,
+  GIGABIT #= 1000,
+  TEN_GIGABIT #= 10000,
 }

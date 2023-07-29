@@ -3,3 +3,4 @@ package model
 
 
 func (ConsoleInput) IsCategoryDetails() {}
+func (ComputerInput) IsCategoryDetails() {}

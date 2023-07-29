@@ -14,8 +14,61 @@ type CategoryDetails interface {
 	IsCategoryDetails()
 }
 
+type AnalogConn struct {
+	PortID      string `json:"port_id" bson:"port_id"`
+	PortKind    Analog `json:"port_kind" bson:"port_kind"`
+	SignalLines int    `json:"signal_lines" bson:"signal_lines"`
+	Input       bool   `json:"input" bson:"input"`
+}
+
+type AnalogConnInput struct {
+	PortID      string `json:"port_id" bson:"port_id"`
+	PortKind    Analog `json:"port_kind" bson:"port_kind"`
+	SignalLines int    `json:"signal_lines" bson:"signal_lines"`
+	Input       bool   `json:"input" bson:"input"`
+}
+
 type CategoryDetailsInput struct {
-	ConsoleInput *ConsoleInput `json:"console_input,omitempty" bson:"console_input"`
+	ConsoleInput  *ConsoleInput  `json:"console_input,omitempty" bson:"console_input"`
+	ComputerInput *ComputerInput `json:"computer_input,omitempty" bson:"computer_input"`
+}
+
+type Computer struct {
+	CPUProcessor        string          `json:"cpu_processor" bson:"cpu_processor"`
+	RAMSize             int             `json:"ram_size" bson:"ram_size"`
+	TotalStorage        int             `json:"total_storage" bson:"total_storage"`
+	ModelYear           int             `json:"model_year" bson:"model_year"`
+	OperatingSystem     string          `json:"operating_system" bson:"operating_system"`
+	DedicatedGraphics   *bool           `json:"dedicated_graphics,omitempty" bson:"dedicated_graphics"`
+	NetworkConnectivity []*NetworkConn  `json:"network_connectivity,omitempty" bson:"network_connectivity"`
+	ComputerPorts       []*ComputerConn `json:"computer_ports,omitempty" bson:"computer_ports"`
+	Power               *Power          `json:"power" bson:"power"`
+}
+
+func (Computer) IsCategoryDetails() {}
+
+type ComputerConn struct {
+	PortID    *string          `json:"port_id,omitempty" bson:"port_id"`
+	PortKind  ComputerConnKind `json:"port_kind" bson:"port_kind"`
+	FrontPort bool             `json:"front_port" bson:"front_port"`
+}
+
+type ComputerConnInput struct {
+	PortID    *string          `json:"port_id,omitempty" bson:"port_id"`
+	PortKind  ComputerConnKind `json:"port_kind" bson:"port_kind"`
+	FrontPort bool             `json:"front_port" bson:"front_port"`
+}
+
+type ComputerInput struct {
+	CPUProcessor        string               `json:"cpu_processor" bson:"cpu_processor"`
+	RAMSize             int                  `json:"ram_size" bson:"ram_size"`
+	TotalStorage        int                  `json:"total_storage" bson:"total_storage"`
+	ModelYear           int                  `json:"model_year" bson:"model_year"`
+	OperatingSystem     string               `json:"operating_system" bson:"operating_system"`
+	DedicatedGraphics   bool                 `json:"dedicated_graphics" bson:"dedicated_graphics"`
+	NetworkConnectivity []*NetworkConnInput  `json:"network_connectivity,omitempty" bson:"network_connectivity"`
+	ComputerPorts       []*ComputerConnInput `json:"computer_ports,omitempty" bson:"computer_ports"`
+	Power               *PowerInput          `json:"power" bson:"power"`
 }
 
 type Console struct {
@@ -103,6 +156,18 @@ type ItemInput struct {
 	PDFBlob      *string         `json:"pdf_blob,omitempty" bson:"pdf_blob"`
 }
 
+type NetworkConn struct {
+	PortID       *string      `json:"port_id,omitempty" bson:"port_id"`
+	MaxConnSpeed NetworkSpeed `json:"max_conn_speed" bson:"max_conn_speed"`
+	Protocol     Protocol     `json:"protocol" bson:"protocol"`
+}
+
+type NetworkConnInput struct {
+	PortID       *string      `json:"port_id,omitempty" bson:"port_id"`
+	MaxConnSpeed NetworkSpeed `json:"max_conn_speed" bson:"max_conn_speed"`
+	Protocol     Protocol     `json:"protocol" bson:"protocol"`
+}
+
 type Power struct {
 	LowerVoltage    *float64        `json:"lower_voltage,omitempty" bson:"lower_voltage"`
 	UpperVoltage    *float64        `json:"upper_voltage,omitempty" bson:"upper_voltage"`
@@ -137,11 +202,17 @@ type UserInput struct {
 type Analog string
 
 const (
-	AnalogXlrAnalog  Analog = "XLR_ANALOG"
-	AnalogXlrDigital Analog = "XLR_DIGITAL"
-	AnalogTs         Analog = "TS"
-	AnalogTrs        Analog = "TRS"
-	AnalogTrrs       Analog = "TRRS"
+	AnalogXlrAnalog      Analog = "XLR_ANALOG"
+	AnalogXlrDigital     Analog = "XLR_DIGITAL"
+	AnalogTs             Analog = "TS"
+	AnalogTrs            Analog = "TRS"
+	AnalogTrrs           Analog = "TRRS"
+	AnalogTriPinPhoenix  Analog = "TRI_PIN_PHOENIX"
+	AnalogDualPinPhoenix Analog = "DUAL_PIN_PHOENIX"
+	AnalogNl2            Analog = "NL2"
+	AnalogNl4            Analog = "NL4"
+	AnalogNl8            Analog = "NL8"
+	AnalogDc12v          Analog = "DC_12V"
 )
 
 var AllAnalog = []Analog{
@@ -150,11 +221,17 @@ var AllAnalog = []Analog{
 	AnalogTs,
 	AnalogTrs,
 	AnalogTrrs,
+	AnalogTriPinPhoenix,
+	AnalogDualPinPhoenix,
+	AnalogNl2,
+	AnalogNl4,
+	AnalogNl8,
+	AnalogDc12v,
 }
 
 func (e Analog) IsValid() bool {
 	switch e {
-	case AnalogXlrAnalog, AnalogXlrDigital, AnalogTs, AnalogTrs, AnalogTrrs:
+	case AnalogXlrAnalog, AnalogXlrDigital, AnalogTs, AnalogTrs, AnalogTrrs, AnalogTriPinPhoenix, AnalogDualPinPhoenix, AnalogNl2, AnalogNl4, AnalogNl8, AnalogDc12v:
 		return true
 	}
 	return false
@@ -178,65 +255,6 @@ func (e *Analog) UnmarshalGQL(v interface{}) error {
 }
 
 func (e Analog) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type Categories string
-
-const (
-	CategoriesConsole     Categories = "CONSOLE"
-	CategoriesProcessor   Categories = "PROCESSOR"
-	CategoriesMonitoring  Categories = "MONITORING"
-	CategoriesSpeaker     Categories = "SPEAKER"
-	CategoriesAmplifier   Categories = "AMPLIFIER"
-	CategoriesComputer    Categories = "COMPUTER"
-	CategoriesNetwork     Categories = "NETWORK"
-	CategoriesRadio       Categories = "RADIO"
-	CategoriesMicrophones Categories = "MICROPHONES"
-	CategoriesSpkHardware Categories = "SPK_HARDWARE"
-	CategoriesGeneric     Categories = "GENERIC"
-)
-
-var AllCategories = []Categories{
-	CategoriesConsole,
-	CategoriesProcessor,
-	CategoriesMonitoring,
-	CategoriesSpeaker,
-	CategoriesAmplifier,
-	CategoriesComputer,
-	CategoriesNetwork,
-	CategoriesRadio,
-	CategoriesMicrophones,
-	CategoriesSpkHardware,
-	CategoriesGeneric,
-}
-
-func (e Categories) IsValid() bool {
-	switch e {
-	case CategoriesConsole, CategoriesProcessor, CategoriesMonitoring, CategoriesSpeaker, CategoriesAmplifier, CategoriesComputer, CategoriesNetwork, CategoriesRadio, CategoriesMicrophones, CategoriesSpkHardware, CategoriesGeneric:
-		return true
-	}
-	return false
-}
-
-func (e Categories) String() string {
-	return string(e)
-}
-
-func (e *Categories) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = Categories(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid Categories", str)
-	}
-	return nil
-}
-
-func (e Categories) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -299,6 +317,153 @@ func (e Category) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+type ComputerConnKind string
+
+const (
+	ComputerConnKindUsbA            ComputerConnKind = "USB_A"
+	ComputerConnKindUsbB            ComputerConnKind = "USB_B"
+	ComputerConnKindUsbC            ComputerConnKind = "USB_C"
+	ComputerConnKindHdmi            ComputerConnKind = "HDMI"
+	ComputerConnKindMiniHdmi        ComputerConnKind = "MINI_HDMI"
+	ComputerConnKindDisplayport     ComputerConnKind = "DISPLAYPORT"
+	ComputerConnKindMiniDisplayport ComputerConnKind = "MINI_DISPLAYPORT"
+	ComputerConnKindMircoB          ComputerConnKind = "MIRCO_B"
+	ComputerConnKindSdCard          ComputerConnKind = "SD_CARD"
+	ComputerConnKindFirewire        ComputerConnKind = "FIREWIRE"
+	ComputerConnKindUsbCThunderbolt ComputerConnKind = "USB_C_THUNDERBOLT"
+)
+
+var AllComputerConnKind = []ComputerConnKind{
+	ComputerConnKindUsbA,
+	ComputerConnKindUsbB,
+	ComputerConnKindUsbC,
+	ComputerConnKindHdmi,
+	ComputerConnKindMiniHdmi,
+	ComputerConnKindDisplayport,
+	ComputerConnKindMiniDisplayport,
+	ComputerConnKindMircoB,
+	ComputerConnKindSdCard,
+	ComputerConnKindFirewire,
+	ComputerConnKindUsbCThunderbolt,
+}
+
+func (e ComputerConnKind) IsValid() bool {
+	switch e {
+	case ComputerConnKindUsbA, ComputerConnKindUsbB, ComputerConnKindUsbC, ComputerConnKindHdmi, ComputerConnKindMiniHdmi, ComputerConnKindDisplayport, ComputerConnKindMiniDisplayport, ComputerConnKindMircoB, ComputerConnKindSdCard, ComputerConnKindFirewire, ComputerConnKindUsbCThunderbolt:
+		return true
+	}
+	return false
+}
+
+func (e ComputerConnKind) String() string {
+	return string(e)
+}
+
+func (e *ComputerConnKind) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ComputerConnKind(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ComputerConnKind", str)
+	}
+	return nil
+}
+
+func (e ComputerConnKind) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type DiaphagmSize string
+
+const (
+	DiaphagmSizeSmall DiaphagmSize = "SMALL"
+	DiaphagmSizeMed   DiaphagmSize = "MED"
+	DiaphagmSizeLarge DiaphagmSize = "LARGE"
+)
+
+var AllDiaphagmSize = []DiaphagmSize{
+	DiaphagmSizeSmall,
+	DiaphagmSizeMed,
+	DiaphagmSizeLarge,
+}
+
+func (e DiaphagmSize) IsValid() bool {
+	switch e {
+	case DiaphagmSizeSmall, DiaphagmSizeMed, DiaphagmSizeLarge:
+		return true
+	}
+	return false
+}
+
+func (e DiaphagmSize) String() string {
+	return string(e)
+}
+
+func (e *DiaphagmSize) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = DiaphagmSize(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid DiaphagmSize", str)
+	}
+	return nil
+}
+
+func (e DiaphagmSize) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type MicrophoneType string
+
+const (
+	MicrophoneTypePrePoloraizedCondensor MicrophoneType = "PRE_POLORAIZED_CONDENSOR"
+	MicrophoneTypeCondensor              MicrophoneType = "CONDENSOR"
+	MicrophoneTypeRibbon                 MicrophoneType = "RIBBON"
+	MicrophoneTypeDynamic                MicrophoneType = "DYNAMIC"
+)
+
+var AllMicrophoneType = []MicrophoneType{
+	MicrophoneTypePrePoloraizedCondensor,
+	MicrophoneTypeCondensor,
+	MicrophoneTypeRibbon,
+	MicrophoneTypeDynamic,
+}
+
+func (e MicrophoneType) IsValid() bool {
+	switch e {
+	case MicrophoneTypePrePoloraizedCondensor, MicrophoneTypeCondensor, MicrophoneTypeRibbon, MicrophoneTypeDynamic:
+		return true
+	}
+	return false
+}
+
+func (e MicrophoneType) String() string {
+	return string(e)
+}
+
+func (e *MicrophoneType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MicrophoneType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MicrophoneType", str)
+	}
+	return nil
+}
+
+func (e MicrophoneType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 type MidiType string
 
 const (
@@ -337,6 +502,153 @@ func (e *MidiType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e MidiType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type NetworkSpeed string
+
+const (
+	NetworkSpeedSuperspeed NetworkSpeed = "SUPERSPEED"
+	NetworkSpeedGigabit    NetworkSpeed = "GIGABIT"
+	NetworkSpeedTenGigabit NetworkSpeed = "TEN_GIGABIT"
+)
+
+var AllNetworkSpeed = []NetworkSpeed{
+	NetworkSpeedSuperspeed,
+	NetworkSpeedGigabit,
+	NetworkSpeedTenGigabit,
+}
+
+func (e NetworkSpeed) IsValid() bool {
+	switch e {
+	case NetworkSpeedSuperspeed, NetworkSpeedGigabit, NetworkSpeedTenGigabit:
+		return true
+	}
+	return false
+}
+
+func (e NetworkSpeed) String() string {
+	return string(e)
+}
+
+func (e *NetworkSpeed) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NetworkSpeed(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NetworkSpeed", str)
+	}
+	return nil
+}
+
+func (e NetworkSpeed) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type NetworkType string
+
+const (
+	NetworkTypeSwitchManaged   NetworkType = "SWITCH_MANAGED"
+	NetworkTypeSwitchUnmanaged NetworkType = "SWITCH_UNMANAGED"
+	NetworkTypeRouter          NetworkType = "ROUTER"
+	NetworkTypeAccessPoint     NetworkType = "ACCESS_POINT"
+	NetworkTypeRouterSwAp      NetworkType = "ROUTER_SW_AP"
+	NetworkTypeInjector        NetworkType = "INJECTOR"
+	NetworkTypeModem           NetworkType = "MODEM"
+	NetworkTypeNic             NetworkType = "NIC"
+	NetworkTypeRepeater        NetworkType = "REPEATER"
+	NetworkTypeNetworkBridge   NetworkType = "NETWORK_BRIDGE"
+)
+
+var AllNetworkType = []NetworkType{
+	NetworkTypeSwitchManaged,
+	NetworkTypeSwitchUnmanaged,
+	NetworkTypeRouter,
+	NetworkTypeAccessPoint,
+	NetworkTypeRouterSwAp,
+	NetworkTypeInjector,
+	NetworkTypeModem,
+	NetworkTypeNic,
+	NetworkTypeRepeater,
+	NetworkTypeNetworkBridge,
+}
+
+func (e NetworkType) IsValid() bool {
+	switch e {
+	case NetworkTypeSwitchManaged, NetworkTypeSwitchUnmanaged, NetworkTypeRouter, NetworkTypeAccessPoint, NetworkTypeRouterSwAp, NetworkTypeInjector, NetworkTypeModem, NetworkTypeNic, NetworkTypeRepeater, NetworkTypeNetworkBridge:
+		return true
+	}
+	return false
+}
+
+func (e NetworkType) String() string {
+	return string(e)
+}
+
+func (e *NetworkType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NetworkType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NetworkType", str)
+	}
+	return nil
+}
+
+func (e NetworkType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type PolarPattern string
+
+const (
+	PolarPatternSupercardioid PolarPattern = "SUPERCARDIOID"
+	PolarPatternCardioid      PolarPattern = "CARDIOID"
+	PolarPatternOmni          PolarPattern = "OMNI"
+	PolarPatternHypercardioid PolarPattern = "HYPERCARDIOID"
+	PolarPatternFigure8       PolarPattern = "FIGURE_8"
+)
+
+var AllPolarPattern = []PolarPattern{
+	PolarPatternSupercardioid,
+	PolarPatternCardioid,
+	PolarPatternOmni,
+	PolarPatternHypercardioid,
+	PolarPatternFigure8,
+}
+
+func (e PolarPattern) IsValid() bool {
+	switch e {
+	case PolarPatternSupercardioid, PolarPatternCardioid, PolarPatternOmni, PolarPatternHypercardioid, PolarPatternFigure8:
+		return true
+	}
+	return false
+}
+
+func (e PolarPattern) String() string {
+	return string(e)
+}
+
+func (e *PolarPattern) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = PolarPattern(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid PolarPattern", str)
+	}
+	return nil
+}
+
+func (e PolarPattern) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -408,6 +720,7 @@ const (
 	ProtocolAvbMilan Protocol = "AVB_MILAN"
 	ProtocolOptocore Protocol = "OPTOCORE"
 	ProtocolUltranet Protocol = "ULTRANET"
+	ProtocolANet     Protocol = "A_NET"
 	ProtocolIP       Protocol = "IP"
 )
 
@@ -418,12 +731,13 @@ var AllProtocol = []Protocol{
 	ProtocolAvbMilan,
 	ProtocolOptocore,
 	ProtocolUltranet,
+	ProtocolANet,
 	ProtocolIP,
 }
 
 func (e Protocol) IsValid() bool {
 	switch e {
-	case ProtocolDante, ProtocolAes67, ProtocolAvb, ProtocolAvbMilan, ProtocolOptocore, ProtocolUltranet, ProtocolIP:
+	case ProtocolDante, ProtocolAes67, ProtocolAvb, ProtocolAvbMilan, ProtocolOptocore, ProtocolUltranet, ProtocolANet, ProtocolIP:
 		return true
 	}
 	return false
@@ -490,5 +804,50 @@ func (e *SampleRate) UnmarshalGQL(v interface{}) error {
 }
 
 func (e SampleRate) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type TransmitterConnector string
+
+const (
+	TransmitterConnectorShureTa4 TransmitterConnector = "SHURE_TA4"
+	TransmitterConnectorMicrodot TransmitterConnector = "MICRODOT"
+	TransmitterConnectorTrrs     TransmitterConnector = "TRRS"
+	TransmitterConnectorTriPin   TransmitterConnector = "TRI_PIN"
+)
+
+var AllTransmitterConnector = []TransmitterConnector{
+	TransmitterConnectorShureTa4,
+	TransmitterConnectorMicrodot,
+	TransmitterConnectorTrrs,
+	TransmitterConnectorTriPin,
+}
+
+func (e TransmitterConnector) IsValid() bool {
+	switch e {
+	case TransmitterConnectorShureTa4, TransmitterConnectorMicrodot, TransmitterConnectorTrrs, TransmitterConnectorTriPin:
+		return true
+	}
+	return false
+}
+
+func (e TransmitterConnector) String() string {
+	return string(e)
+}
+
+func (e *TransmitterConnector) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TransmitterConnector(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TransmitterConnector", str)
+	}
+	return nil
+}
+
+func (e TransmitterConnector) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

@@ -37,22 +37,30 @@ type Console {
   power: Power!
 }
 
-input PowerInput {
-  lower_voltage: Float
-  upper_voltage: Float
-  wattage: Float!
-  max_wattage: Float!
-  redundant: Boolean
-  input_connector: PowerConnector!
-  output_connector: PowerConnector
+type Computer {
+  cpu_processor: String!
+  ram_size: Int!
+  total_storage: Int!
+  # Potentially change to a Date custom scalar
+  model_year: Int!
+  operating_system: String!
+  dedicated_graphics: Boolean
+  network_connectivity: [NetworkConn]
+  computer_ports: [ComputerConn]
+  power: Power!
 }
 
-type Power {
-  lower_voltage: Float
-  upper_voltage: Float
-  wattage: Float!
-  max_wattage: Float!
-  redundant: Boolean
-  input_connector: PowerConnector!
-  output_connector: PowerConnector
+input ComputerInput {
+  cpu_processor: String!
+  ram_size: Int!
+  total_storage: Int!
+  # Potentially change to a Date custom scalar
+  model_year: Int!
+  operating_system: String!
+  dedicated_graphics: Boolean!
+  network_connectivity: [NetworkConnInput!]
+  computer_ports: [ComputerConnInput!]
+  power: PowerInput!
 }
+
+

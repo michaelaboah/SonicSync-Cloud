@@ -70,7 +70,7 @@ func uniqueIndices(client *mongo.Client) {
     Keys: bson.M{"model": 1},
     Options: options.Index().SetUnique(true),
   }
-
+  
   textSearchIndex := mongo.IndexModel { Keys: bson.D{{"model", "text"}}}
 
   indices := []mongo.IndexModel{uniqueModelIndex, textSearchIndex}

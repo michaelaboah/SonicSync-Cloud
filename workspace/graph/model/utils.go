@@ -1,6 +1,10 @@
 package model
 
-import "go.mongodb.org/mongo-driver/bson"
+import (
+	"errors"
+
+	"go.mongodb.org/mongo-driver/bson"
+)
 
 
 
@@ -20,7 +24,8 @@ func MatchDetails(category Category, detailsBytes []byte) (CategoryDetails, erro
   case CategoryAmplifier: 
     // var amplifier *Amplifier
 
-
+  default:
+    return nil, errors.New("Unimplemnted Category" + category.String())
   } 
 
   return nil, nil

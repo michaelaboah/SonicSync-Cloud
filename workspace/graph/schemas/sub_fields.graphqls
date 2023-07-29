@@ -1,0 +1,86 @@
+input PowerInput {
+  lower_voltage: Float
+  upper_voltage: Float
+  wattage: Float!
+  max_wattage: Float!
+  redundant: Boolean
+  input_connector: PowerConnector!
+  output_connector: PowerConnector
+}
+
+type Power {
+  lower_voltage: Float
+  upper_voltage: Float
+  wattage: Float!
+  max_wattage: Float!
+  redundant: Boolean
+  input_connector: PowerConnector!
+  output_connector: PowerConnector
+}
+
+
+input DimensionInput {
+  length: Float!
+  width: Float!
+  height: Float!
+}
+
+type Dimension {
+  length: Float!
+  width: Float!
+  height: Float!
+}
+
+# "Addition of network ports. Various Protocols are handled via the: (Protocol Enummeration)",
+input NetworkConnInput {
+  # Port identifier
+  port_id: String
+  max_conn_speed: NetworkSpeed!
+  protocol: Protocol!
+}
+
+type NetworkConn {
+  port_id: String
+  max_conn_speed: NetworkSpeed!
+  protocol: Protocol!
+}
+
+
+
+input ComputerConnInput {
+ # Port identifier
+  port_id: String
+  port_kind: ComputerConnKind!
+  front_port: Boolean! = False 
+}
+
+
+type ComputerConn {
+ # Port identifier
+  port_id: String
+  port_kind: ComputerConnKind!
+  front_port: Boolean!
+}
+
+
+
+
+input AnalogConnInput {
+  port_id: String!
+  port_kind: Analog! = XLR_ANALOG
+  # Amount of (stream/signals) that can be transmitted on a 
+  signal_lines: Int! = 1
+  input: Boolean!
+}
+
+
+type AnalogConn {
+  port_id: String!
+  port_kind: Analog!
+  # Amount of (stream/signals) that can be transmitted on a 
+  signal_lines: Int!
+  input: Boolean!
+}
+
+
+

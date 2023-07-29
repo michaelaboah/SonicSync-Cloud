@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput
 		PDFBlob:      input.PDFBlob,
 	}
 	items.InsertOne(ctx, item)
-	
+
 	return item, nil
 }
 
@@ -82,36 +82,38 @@ func (r *queryResolver) Items(ctx context.Context) ([]*model.Item, error) {
 	var results []*model.Item
 
 	for itemsCursor.Next(ctx) {
-		var ( 
-     doc bson.M
-		 item *model.Item
-     err error
-    )
+		var (
+			doc  bson.M
+			item *model.Item
+			err  error
+		)
 
 		itemsCursor.Decode(&doc)
 
 		// Should be a better way to do this without needing to marshal to itemBytes and back
 		itemBytes, err := bson.Marshal(doc)
-    if err != nil {
-      log.Println("Error Marshaling BSON to bytes: ", err) 
-    }
+		if err != nil {
+			log.Println("Error Marshaling BSON to bytes: ", err)
+		}
 
 		detailsBytes, _ := bson.Marshal(doc["details"])
 
-    err = bson.Unmarshal(itemBytes, &item); if err != nil {
-      log.Println(err)
-    }
+		err = bson.Unmarshal(itemBytes, &item)
+		if err != nil {
+			log.Println(err)
+		}
 
-    details, err := model.MatchDetails(item.Category, detailsBytes); if err != nil {
-      log.Println("Error Unmarshaling bytes", err)
-    }
+		details, err := model.MatchDetails(item.Category, detailsBytes)
+		if err != nil {
+			log.Println("Error Unmarshaling bytes", err)
+		}
 
-    item.Details = details
+		item.Details = details
 
 		results = append(results, item)
 
 	}
-  fmt.Println("Number of Items: ", len(results))
+	fmt.Println("Number of Items: ", len(results))
 	return results, nil
 }
 
@@ -122,30 +124,31 @@ func (r *queryResolver) FindByModel(ctx context.Context, modelName string) (*mod
 
 	var doc bson.M
 	var item *model.Item
-  var err error
-  
+	var err error
+
 	itemResult.Decode(&doc)
-  
+
 	itemBytes, err := bson.Marshal(doc)
-  if err != nil {
-    log.Println("Error Marshaling BSON to bytes: ", err) 
-  }
+	if err != nil {
+		log.Println("Error Marshaling BSON to bytes: ", err)
+	}
 
+	detailsBytes, err := bson.Marshal(doc["details"])
+	if err != nil {
+		log.Println("Error Marshal 'details' from mongo document: ", err)
+	}
 
-  detailsBytes, err := bson.Marshal(doc["details"])
-  if err != nil {
-    log.Println("Error Marshal 'details' from mongo document: ", err) 
-  } 
+	err = bson.Unmarshal(itemBytes, &item)
+	if err != nil {
+		log.Println(err)
+	}
 
-  err = bson.Unmarshal(itemBytes, &item); if err != nil {
-    log.Println(err)
-  }
+	details, err := model.MatchDetails(item.Category, detailsBytes)
+	if err != nil {
+		log.Println("Error Unmarshaling bytes", err)
+	}
 
-  details, err := model.MatchDetails(item.Category, detailsBytes); if err != nil {
-    log.Println("Error Unmarshaling bytes", err)
-  }
-
-  item.Details = details
+	item.Details = details
 
 	return item, nil
 }

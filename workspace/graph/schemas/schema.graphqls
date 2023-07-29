@@ -44,17 +44,13 @@ input ItemInput {
   pdf_blob: String
 }
 
-input DimensionInput {
-  length: Float!
-  width: Float!
-  height: Float!
-}
 
 input CategoryDetailsInput @oneOf {
   console_input: ConsoleInput
+  computer_input: ComputerInput 
 }
 
-union CategoryDetails = Console
+union CategoryDetails = Console | Computer
 
 type Item {
   id: ObjectID!
@@ -71,11 +67,7 @@ type Item {
   pdf_blob: String
 }
 
-type Dimension {
-  length: Float!
-  width: Float!
-  height: Float!
-}
+
 
 
 type Error {
