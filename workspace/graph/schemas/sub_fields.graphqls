@@ -51,7 +51,7 @@ input ComputerConnInput {
  # Port identifier
   port_id: String
   port_kind: ComputerConnKind!
-  front_port: Boolean! = False 
+  front_port: Boolean! = false 
 }
 
 
@@ -70,16 +70,18 @@ input AnalogConnInput {
   port_kind: Analog! = XLR_ANALOG
   # Amount of (stream/signals) that can be transmitted on a 
   signal_lines: Int! = 1
-  input: Boolean!
+  port_usage: AnalogUsage! = INPUT
+  # if phantom == true; input must == true
 }
 
-
+# Used for AudioSignals
 type AnalogConn {
   port_id: String!
   port_kind: Analog!
-  # Amount of (stream/signals) that can be transmitted on a 
+  # What is the purpose of the signal, in/out/aux?
+  port_usage: AnalogUsage!
+  # Amount of (stream/signals) that can be transmitted on a single cable
   signal_lines: Int!
-  input: Boolean!
 }
 
 

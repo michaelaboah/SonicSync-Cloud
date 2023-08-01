@@ -1,13 +1,7 @@
 
 input ConsoleInput {
-  total_inputs: Int!
-  total_outputs: Int!
-  total_busses: Int!
-  physical_inputs: Int!
-  physical_outputs: Int!
-  aux_inputs: Int!
-  physical_aux_inputs: Int!
-  phantom_power_inputs: Int!
+  analog_connections: [AnalogConnInput!]
+  network_connections: [NetworkConnInput!]  
   faders: Int!
   motorized: Boolean!
   midi: MidiType!
@@ -18,17 +12,24 @@ input ConsoleInput {
   power: PowerInput
 }
 
+
+  # total_inputs: Int!
+  # total_outputs: Int!
+  # total_busses: Int!
+  # physical_inputs: Int!
+  # physical_outputs: Int!
+  # aux_inputs: Int!
+  # physical_aux_inputs: Int!
+  # phantom_power_inputs: Int!
+
 type Console {
-  total_inputs: Int!
-  total_outputs: Int!
-  total_busses: Int!
-  physical_inputs: Int!
-  physical_outputs: Int!
-  aux_inputs: Int!
-  physical_aux_inputs: Int!
-  phantom_power_inputs: Int!
-  faders: Int!
+# Physical Audio Cable connections
+  analog_connections: [AnalogConn!]
+  network_connections: [NetworkConn!]  
+  # --
+  faders: Int! 
   motorized: Boolean!
+  # --
   midi: MidiType!
   protocol_inputs: Int!
   signal_protocol: Protocol!
@@ -45,7 +46,7 @@ type Computer {
   model_year: Int!
   operating_system: String!
   dedicated_graphics: Boolean
-  network_connectivity: [NetworkConn]
+  network_connections: [NetworkConn]
   computer_ports: [ComputerConn]
   power: Power!
 }
@@ -58,7 +59,7 @@ input ComputerInput {
   model_year: Int!
   operating_system: String!
   dedicated_graphics: Boolean!
-  network_connectivity: [NetworkConnInput!]
+  network_connections: [NetworkConnInput!]
   computer_ports: [ComputerConnInput!]
   power: PowerInput!
 }

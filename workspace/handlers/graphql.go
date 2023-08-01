@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
-	"fmt"
+	// "fmt"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -53,7 +53,7 @@ func Directive(ctx context.Context, obj interface{}, next graphql.Resolver) (res
 	}
 
 	v := obj.(map[string]interface{})
-  fmt.Println(v)
+  // fmt.Println(v)
 	c := len(v)
 	if c == 0 {
 		return nil, ErrNoOptionSelected

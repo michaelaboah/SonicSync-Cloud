@@ -37,6 +37,13 @@ enum Analog {
   DC_12V
 }
 
+enum AnalogUsage {
+  INPUT
+  INPUT_48V
+  OUTPUT
+  AUX
+}
+
 enum PowerConnector {
   IEC
   EDISON

@@ -48,22 +48,22 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	AnalogConn struct {
-		Input       func(childComplexity int) int
 		PortID      func(childComplexity int) int
 		PortKind    func(childComplexity int) int
+		PortUsage   func(childComplexity int) int
 		SignalLines func(childComplexity int) int
 	}
 
 	Computer struct {
-		CPUProcessor        func(childComplexity int) int
-		ComputerPorts       func(childComplexity int) int
-		DedicatedGraphics   func(childComplexity int) int
-		ModelYear           func(childComplexity int) int
-		NetworkConnectivity func(childComplexity int) int
-		OperatingSystem     func(childComplexity int) int
-		Power               func(childComplexity int) int
-		RAMSize             func(childComplexity int) int
-		TotalStorage        func(childComplexity int) int
+		CPUProcessor       func(childComplexity int) int
+		ComputerPorts      func(childComplexity int) int
+		DedicatedGraphics  func(childComplexity int) int
+		ModelYear          func(childComplexity int) int
+		NetworkConnections func(childComplexity int) int
+		OperatingSystem    func(childComplexity int) int
+		Power              func(childComplexity int) int
+		RAMSize            func(childComplexity int) int
+		TotalStorage       func(childComplexity int) int
 	}
 
 	ComputerConn struct {
@@ -73,22 +73,16 @@ type ComplexityRoot struct {
 	}
 
 	Console struct {
-		AuxInputs          func(childComplexity int) int
+		AnalogConnections  func(childComplexity int) int
 		CanExpand          func(childComplexity int) int
 		Faders             func(childComplexity int) int
 		MaxSampleRate      func(childComplexity int) int
 		Midi               func(childComplexity int) int
 		Motorized          func(childComplexity int) int
-		PhantomPowerInputs func(childComplexity int) int
-		PhysicalAuxInputs  func(childComplexity int) int
-		PhysicalInputs     func(childComplexity int) int
-		PhysicalOutputs    func(childComplexity int) int
+		NetworkConnections func(childComplexity int) int
 		Power              func(childComplexity int) int
 		ProtocolInputs     func(childComplexity int) int
 		SignalProtocol     func(childComplexity int) int
-		TotalBusses        func(childComplexity int) int
-		TotalInputs        func(childComplexity int) int
-		TotalOutputs       func(childComplexity int) int
 	}
 
 	Dimension struct {
@@ -176,13 +170,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "AnalogConn.input":
-		if e.complexity.AnalogConn.Input == nil {
-			break
-		}
-
-		return e.complexity.AnalogConn.Input(childComplexity), true
-
 	case "AnalogConn.port_id":
 		if e.complexity.AnalogConn.PortID == nil {
 			break
@@ -196,6 +183,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.AnalogConn.PortKind(childComplexity), true
+
+	case "AnalogConn.port_usage":
+		if e.complexity.AnalogConn.PortUsage == nil {
+			break
+		}
+
+		return e.complexity.AnalogConn.PortUsage(childComplexity), true
 
 	case "AnalogConn.signal_lines":
 		if e.complexity.AnalogConn.SignalLines == nil {
@@ -232,12 +226,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Computer.ModelYear(childComplexity), true
 
-	case "Computer.network_connectivity":
-		if e.complexity.Computer.NetworkConnectivity == nil {
+	case "Computer.network_connections":
+		if e.complexity.Computer.NetworkConnections == nil {
 			break
 		}
 
-		return e.complexity.Computer.NetworkConnectivity(childComplexity), true
+		return e.complexity.Computer.NetworkConnections(childComplexity), true
 
 	case "Computer.operating_system":
 		if e.complexity.Computer.OperatingSystem == nil {
@@ -288,12 +282,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ComputerConn.PortKind(childComplexity), true
 
-	case "Console.aux_inputs":
-		if e.complexity.Console.AuxInputs == nil {
+	case "Console.analog_connections":
+		if e.complexity.Console.AnalogConnections == nil {
 			break
 		}
 
-		return e.complexity.Console.AuxInputs(childComplexity), true
+		return e.complexity.Console.AnalogConnections(childComplexity), true
 
 	case "Console.can_expand":
 		if e.complexity.Console.CanExpand == nil {
@@ -330,33 +324,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Console.Motorized(childComplexity), true
 
-	case "Console.phantom_power_inputs":
-		if e.complexity.Console.PhantomPowerInputs == nil {
+	case "Console.network_connections":
+		if e.complexity.Console.NetworkConnections == nil {
 			break
 		}
 
-		return e.complexity.Console.PhantomPowerInputs(childComplexity), true
-
-	case "Console.physical_aux_inputs":
-		if e.complexity.Console.PhysicalAuxInputs == nil {
-			break
-		}
-
-		return e.complexity.Console.PhysicalAuxInputs(childComplexity), true
-
-	case "Console.physical_inputs":
-		if e.complexity.Console.PhysicalInputs == nil {
-			break
-		}
-
-		return e.complexity.Console.PhysicalInputs(childComplexity), true
-
-	case "Console.physical_outputs":
-		if e.complexity.Console.PhysicalOutputs == nil {
-			break
-		}
-
-		return e.complexity.Console.PhysicalOutputs(childComplexity), true
+		return e.complexity.Console.NetworkConnections(childComplexity), true
 
 	case "Console.power":
 		if e.complexity.Console.Power == nil {
@@ -378,27 +351,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Console.SignalProtocol(childComplexity), true
-
-	case "Console.total_busses":
-		if e.complexity.Console.TotalBusses == nil {
-			break
-		}
-
-		return e.complexity.Console.TotalBusses(childComplexity), true
-
-	case "Console.total_inputs":
-		if e.complexity.Console.TotalInputs == nil {
-			break
-		}
-
-		return e.complexity.Console.TotalInputs(childComplexity), true
-
-	case "Console.total_outputs":
-		if e.complexity.Console.TotalOutputs == nil {
-			break
-		}
-
-		return e.complexity.Console.TotalOutputs(childComplexity), true
 
 	case "Dimension.height":
 		if e.complexity.Dimension.Height == nil {
@@ -992,6 +944,50 @@ func (ec *executionContext) fieldContext_AnalogConn_port_kind(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _AnalogConn_port_usage(ctx context.Context, field graphql.CollectedField, obj *model.AnalogConn) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AnalogConn_port_usage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PortUsage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.AnalogUsage)
+	fc.Result = res
+	return ec.marshalNAnalogUsage2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogUsage(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AnalogConn_port_usage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AnalogConn",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type AnalogUsage does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _AnalogConn_signal_lines(ctx context.Context, field graphql.CollectedField, obj *model.AnalogConn) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_AnalogConn_signal_lines(ctx, field)
 	if err != nil {
@@ -1031,50 +1027,6 @@ func (ec *executionContext) fieldContext_AnalogConn_signal_lines(ctx context.Con
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _AnalogConn_input(ctx context.Context, field graphql.CollectedField, obj *model.AnalogConn) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_AnalogConn_input(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Input, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(bool)
-	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_AnalogConn_input(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "AnalogConn",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1341,8 +1293,8 @@ func (ec *executionContext) fieldContext_Computer_dedicated_graphics(ctx context
 	return fc, nil
 }
 
-func (ec *executionContext) _Computer_network_connectivity(ctx context.Context, field graphql.CollectedField, obj *model.Computer) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Computer_network_connectivity(ctx, field)
+func (ec *executionContext) _Computer_network_connections(ctx context.Context, field graphql.CollectedField, obj *model.Computer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Computer_network_connections(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1355,7 +1307,7 @@ func (ec *executionContext) _Computer_network_connectivity(ctx context.Context, 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.NetworkConnectivity, nil
+		return obj.NetworkConnections, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1369,7 +1321,7 @@ func (ec *executionContext) _Computer_network_connectivity(ctx context.Context, 
 	return ec.marshalONetworkConn2ᚕᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐNetworkConn(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Computer_network_connectivity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Computer_network_connections(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Computer",
 		Field:      field,
@@ -1628,8 +1580,8 @@ func (ec *executionContext) fieldContext_ComputerConn_front_port(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _Console_total_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Console_total_inputs(ctx, field)
+func (ec *executionContext) _Console_analog_connections(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_analog_connections(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1642,38 +1594,45 @@ func (ec *executionContext) _Console_total_inputs(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.TotalInputs, nil
+		return obj.AnalogConnections, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.([]*model.AnalogConn)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalOAnalogConn2ᚕᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogConnᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Console_total_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Console_analog_connections(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Console",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			switch field.Name {
+			case "port_id":
+				return ec.fieldContext_AnalogConn_port_id(ctx, field)
+			case "port_kind":
+				return ec.fieldContext_AnalogConn_port_kind(ctx, field)
+			case "port_usage":
+				return ec.fieldContext_AnalogConn_port_usage(ctx, field)
+			case "signal_lines":
+				return ec.fieldContext_AnalogConn_signal_lines(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AnalogConn", field.Name)
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Console_total_outputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Console_total_outputs(ctx, field)
+func (ec *executionContext) _Console_network_connections(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Console_network_connections(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1686,295 +1645,36 @@ func (ec *executionContext) _Console_total_outputs(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.TotalOutputs, nil
+		return obj.NetworkConnections, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.([]*model.NetworkConn)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalONetworkConn2ᚕᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐNetworkConnᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Console_total_outputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Console_network_connections(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Console",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Console_total_busses(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Console_total_busses(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.TotalBusses, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Console_total_busses(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Console",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Console_physical_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Console_physical_inputs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PhysicalInputs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Console_physical_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Console",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Console_physical_outputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Console_physical_outputs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PhysicalOutputs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Console_physical_outputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Console",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Console_aux_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Console_aux_inputs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.AuxInputs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Console_aux_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Console",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Console_physical_aux_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Console_physical_aux_inputs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PhysicalAuxInputs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Console_physical_aux_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Console",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Console_phantom_power_inputs(ctx context.Context, field graphql.CollectedField, obj *model.Console) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Console_phantom_power_inputs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PhantomPowerInputs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Console_phantom_power_inputs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Console",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			switch field.Name {
+			case "port_id":
+				return ec.fieldContext_NetworkConn_port_id(ctx, field)
+			case "max_conn_speed":
+				return ec.fieldContext_NetworkConn_max_conn_speed(ctx, field)
+			case "protocol":
+				return ec.fieldContext_NetworkConn_protocol(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NetworkConn", field.Name)
 		},
 	}
 	return fc, nil
@@ -5911,8 +5611,11 @@ func (ec *executionContext) unmarshalInputAnalogConnInput(ctx context.Context, o
 	if _, present := asMap["signal_lines"]; !present {
 		asMap["signal_lines"] = 1
 	}
+	if _, present := asMap["port_usage"]; !present {
+		asMap["port_usage"] = "INPUT"
+	}
 
-	fieldsInOrder := [...]string{"port_id", "port_kind", "signal_lines", "input"}
+	fieldsInOrder := [...]string{"port_id", "port_kind", "signal_lines", "port_usage"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -5946,15 +5649,15 @@ func (ec *executionContext) unmarshalInputAnalogConnInput(ctx context.Context, o
 				return it, err
 			}
 			it.SignalLines = data
-		case "input":
+		case "port_usage":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("port_usage"))
+			data, err := ec.unmarshalNAnalogUsage2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogUsage(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Input = data
+			it.PortUsage = data
 		}
 	}
 
@@ -6041,7 +5744,7 @@ func (ec *executionContext) unmarshalInputComputerConnInput(ctx context.Context,
 	}
 
 	if _, present := asMap["front_port"]; !present {
-		asMap["front_port"] = "False"
+		asMap["front_port"] = false
 	}
 
 	fieldsInOrder := [...]string{"port_id", "port_kind", "front_port"}
@@ -6091,7 +5794,7 @@ func (ec *executionContext) unmarshalInputComputerInput(ctx context.Context, obj
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"cpu_processor", "ram_size", "total_storage", "model_year", "operating_system", "dedicated_graphics", "network_connectivity", "computer_ports", "power"}
+	fieldsInOrder := [...]string{"cpu_processor", "ram_size", "total_storage", "model_year", "operating_system", "dedicated_graphics", "network_connections", "computer_ports", "power"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -6152,15 +5855,15 @@ func (ec *executionContext) unmarshalInputComputerInput(ctx context.Context, obj
 				return it, err
 			}
 			it.DedicatedGraphics = data
-		case "network_connectivity":
+		case "network_connections":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("network_connectivity"))
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("network_connections"))
 			data, err := ec.unmarshalONetworkConnInput2ᚕᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐNetworkConnInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.NetworkConnectivity = data
+			it.NetworkConnections = data
 		case "computer_ports":
 			var err error
 
@@ -6192,85 +5895,31 @@ func (ec *executionContext) unmarshalInputConsoleInput(ctx context.Context, obj 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"total_inputs", "total_outputs", "total_busses", "physical_inputs", "physical_outputs", "aux_inputs", "physical_aux_inputs", "phantom_power_inputs", "faders", "motorized", "midi", "protocol_inputs", "signal_protocol", "can_expand", "max_sample_rate", "power"}
+	fieldsInOrder := [...]string{"analog_connections", "network_connections", "faders", "motorized", "midi", "protocol_inputs", "signal_protocol", "can_expand", "max_sample_rate", "power"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "total_inputs":
+		case "analog_connections":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("total_inputs"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("analog_connections"))
+			data, err := ec.unmarshalOAnalogConnInput2ᚕᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogConnInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.TotalInputs = data
-		case "total_outputs":
+			it.AnalogConnections = data
+		case "network_connections":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("total_outputs"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("network_connections"))
+			data, err := ec.unmarshalONetworkConnInput2ᚕᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐNetworkConnInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.TotalOutputs = data
-		case "total_busses":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("total_busses"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.TotalBusses = data
-		case "physical_inputs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("physical_inputs"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.PhysicalInputs = data
-		case "physical_outputs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("physical_outputs"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.PhysicalOutputs = data
-		case "aux_inputs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("aux_inputs"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AuxInputs = data
-		case "physical_aux_inputs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("physical_aux_inputs"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.PhysicalAuxInputs = data
-		case "phantom_power_inputs":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("phantom_power_inputs"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.PhantomPowerInputs = data
+			it.NetworkConnections = data
 		case "faders":
 			var err error
 
@@ -6730,13 +6379,13 @@ func (ec *executionContext) _AnalogConn(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "signal_lines":
-			out.Values[i] = ec._AnalogConn_signal_lines(ctx, field, obj)
+		case "port_usage":
+			out.Values[i] = ec._AnalogConn_port_usage(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "input":
-			out.Values[i] = ec._AnalogConn_input(ctx, field, obj)
+		case "signal_lines":
+			out.Values[i] = ec._AnalogConn_signal_lines(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -6801,8 +6450,8 @@ func (ec *executionContext) _Computer(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "dedicated_graphics":
 			out.Values[i] = ec._Computer_dedicated_graphics(ctx, field, obj)
-		case "network_connectivity":
-			out.Values[i] = ec._Computer_network_connectivity(ctx, field, obj)
+		case "network_connections":
+			out.Values[i] = ec._Computer_network_connections(ctx, field, obj)
 		case "computer_ports":
 			out.Values[i] = ec._Computer_computer_ports(ctx, field, obj)
 		case "power":
@@ -6890,46 +6539,10 @@ func (ec *executionContext) _Console(ctx context.Context, sel ast.SelectionSet, 
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Console")
-		case "total_inputs":
-			out.Values[i] = ec._Console_total_inputs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "total_outputs":
-			out.Values[i] = ec._Console_total_outputs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "total_busses":
-			out.Values[i] = ec._Console_total_busses(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "physical_inputs":
-			out.Values[i] = ec._Console_physical_inputs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "physical_outputs":
-			out.Values[i] = ec._Console_physical_outputs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "aux_inputs":
-			out.Values[i] = ec._Console_aux_inputs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "physical_aux_inputs":
-			out.Values[i] = ec._Console_physical_aux_inputs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "phantom_power_inputs":
-			out.Values[i] = ec._Console_phantom_power_inputs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
+		case "analog_connections":
+			out.Values[i] = ec._Console_analog_connections(ctx, field, obj)
+		case "network_connections":
+			out.Values[i] = ec._Console_network_connections(ctx, field, obj)
 		case "faders":
 			out.Values[i] = ec._Console_faders(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -7828,6 +7441,31 @@ func (ec *executionContext) marshalNAnalog2githubᚗcomᚋmichaelaboahᚋsonic�
 	return v
 }
 
+func (ec *executionContext) marshalNAnalogConn2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogConn(ctx context.Context, sel ast.SelectionSet, v *model.AnalogConn) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AnalogConn(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNAnalogConnInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogConnInput(ctx context.Context, v interface{}) (*model.AnalogConnInput, error) {
+	res, err := ec.unmarshalInputAnalogConnInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNAnalogUsage2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogUsage(ctx context.Context, v interface{}) (model.AnalogUsage, error) {
+	var res model.AnalogUsage
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAnalogUsage2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogUsage(ctx context.Context, sel ast.SelectionSet, v model.AnalogUsage) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -7984,6 +7622,16 @@ func (ec *executionContext) unmarshalNMidiType2githubᚗcomᚋmichaelaboahᚋson
 
 func (ec *executionContext) marshalNMidiType2githubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐMidiType(ctx context.Context, sel ast.SelectionSet, v model.MidiType) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) marshalNNetworkConn2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐNetworkConn(ctx context.Context, sel ast.SelectionSet, v *model.NetworkConn) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._NetworkConn(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNNetworkConnInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐNetworkConnInput(ctx context.Context, v interface{}) (*model.NetworkConnInput, error) {
@@ -8392,6 +8040,73 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
+func (ec *executionContext) marshalOAnalogConn2ᚕᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogConnᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.AnalogConn) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNAnalogConn2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogConn(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOAnalogConnInput2ᚕᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogConnInputᚄ(ctx context.Context, v interface{}) ([]*model.AnalogConnInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*model.AnalogConnInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAnalogConnInput2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐAnalogConnInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -8585,6 +8300,53 @@ func (ec *executionContext) marshalONetworkConn2ᚕᚖgithubᚗcomᚋmichaelaboa
 
 	}
 	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalONetworkConn2ᚕᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐNetworkConnᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.NetworkConn) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNNetworkConn2ᚖgithubᚗcomᚋmichaelaboahᚋsonicᚑsyncᚑcloudᚋgraphᚋmodelᚐNetworkConn(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
 
 	return ret
 }

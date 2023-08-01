@@ -15,17 +15,17 @@ type CategoryDetails interface {
 }
 
 type AnalogConn struct {
-	PortID      string `json:"port_id" bson:"port_id"`
-	PortKind    Analog `json:"port_kind" bson:"port_kind"`
-	SignalLines int    `json:"signal_lines" bson:"signal_lines"`
-	Input       bool   `json:"input" bson:"input"`
+	PortID      string      `json:"port_id" bson:"port_id"`
+	PortKind    Analog      `json:"port_kind" bson:"port_kind"`
+	PortUsage   AnalogUsage `json:"port_usage" bson:"port_usage"`
+	SignalLines int         `json:"signal_lines" bson:"signal_lines"`
 }
 
 type AnalogConnInput struct {
-	PortID      string `json:"port_id" bson:"port_id"`
-	PortKind    Analog `json:"port_kind" bson:"port_kind"`
-	SignalLines int    `json:"signal_lines" bson:"signal_lines"`
-	Input       bool   `json:"input" bson:"input"`
+	PortID      string      `json:"port_id" bson:"port_id"`
+	PortKind    Analog      `json:"port_kind" bson:"port_kind"`
+	SignalLines int         `json:"signal_lines" bson:"signal_lines"`
+	PortUsage   AnalogUsage `json:"port_usage" bson:"port_usage"`
 }
 
 type CategoryDetailsInput struct {
@@ -34,15 +34,15 @@ type CategoryDetailsInput struct {
 }
 
 type Computer struct {
-	CPUProcessor        string          `json:"cpu_processor" bson:"cpu_processor"`
-	RAMSize             int             `json:"ram_size" bson:"ram_size"`
-	TotalStorage        int             `json:"total_storage" bson:"total_storage"`
-	ModelYear           int             `json:"model_year" bson:"model_year"`
-	OperatingSystem     string          `json:"operating_system" bson:"operating_system"`
-	DedicatedGraphics   *bool           `json:"dedicated_graphics,omitempty" bson:"dedicated_graphics"`
-	NetworkConnectivity []*NetworkConn  `json:"network_connectivity,omitempty" bson:"network_connectivity"`
-	ComputerPorts       []*ComputerConn `json:"computer_ports,omitempty" bson:"computer_ports"`
-	Power               *Power          `json:"power" bson:"power"`
+	CPUProcessor       string          `json:"cpu_processor" bson:"cpu_processor"`
+	RAMSize            int             `json:"ram_size" bson:"ram_size"`
+	TotalStorage       int             `json:"total_storage" bson:"total_storage"`
+	ModelYear          int             `json:"model_year" bson:"model_year"`
+	OperatingSystem    string          `json:"operating_system" bson:"operating_system"`
+	DedicatedGraphics  *bool           `json:"dedicated_graphics,omitempty" bson:"dedicated_graphics"`
+	NetworkConnections []*NetworkConn  `json:"network_connections,omitempty" bson:"network_connections"`
+	ComputerPorts      []*ComputerConn `json:"computer_ports,omitempty" bson:"computer_ports"`
+	Power              *Power          `json:"power" bson:"power"`
 }
 
 func (Computer) IsCategoryDetails() {}
@@ -60,55 +60,43 @@ type ComputerConnInput struct {
 }
 
 type ComputerInput struct {
-	CPUProcessor        string               `json:"cpu_processor" bson:"cpu_processor"`
-	RAMSize             int                  `json:"ram_size" bson:"ram_size"`
-	TotalStorage        int                  `json:"total_storage" bson:"total_storage"`
-	ModelYear           int                  `json:"model_year" bson:"model_year"`
-	OperatingSystem     string               `json:"operating_system" bson:"operating_system"`
-	DedicatedGraphics   bool                 `json:"dedicated_graphics" bson:"dedicated_graphics"`
-	NetworkConnectivity []*NetworkConnInput  `json:"network_connectivity,omitempty" bson:"network_connectivity"`
-	ComputerPorts       []*ComputerConnInput `json:"computer_ports,omitempty" bson:"computer_ports"`
-	Power               *PowerInput          `json:"power" bson:"power"`
+	CPUProcessor       string               `json:"cpu_processor" bson:"cpu_processor"`
+	RAMSize            int                  `json:"ram_size" bson:"ram_size"`
+	TotalStorage       int                  `json:"total_storage" bson:"total_storage"`
+	ModelYear          int                  `json:"model_year" bson:"model_year"`
+	OperatingSystem    string               `json:"operating_system" bson:"operating_system"`
+	DedicatedGraphics  bool                 `json:"dedicated_graphics" bson:"dedicated_graphics"`
+	NetworkConnections []*NetworkConnInput  `json:"network_connections,omitempty" bson:"network_connections"`
+	ComputerPorts      []*ComputerConnInput `json:"computer_ports,omitempty" bson:"computer_ports"`
+	Power              *PowerInput          `json:"power" bson:"power"`
 }
 
 type Console struct {
-	TotalInputs        int        `json:"total_inputs" bson:"total_inputs"`
-	TotalOutputs       int        `json:"total_outputs" bson:"total_outputs"`
-	TotalBusses        int        `json:"total_busses" bson:"total_busses"`
-	PhysicalInputs     int        `json:"physical_inputs" bson:"physical_inputs"`
-	PhysicalOutputs    int        `json:"physical_outputs" bson:"physical_outputs"`
-	AuxInputs          int        `json:"aux_inputs" bson:"aux_inputs"`
-	PhysicalAuxInputs  int        `json:"physical_aux_inputs" bson:"physical_aux_inputs"`
-	PhantomPowerInputs int        `json:"phantom_power_inputs" bson:"phantom_power_inputs"`
-	Faders             int        `json:"faders" bson:"faders"`
-	Motorized          bool       `json:"motorized" bson:"motorized"`
-	Midi               MidiType   `json:"midi" bson:"midi"`
-	ProtocolInputs     int        `json:"protocol_inputs" bson:"protocol_inputs"`
-	SignalProtocol     Protocol   `json:"signal_protocol" bson:"signal_protocol"`
-	CanExpand          bool       `json:"can_expand" bson:"can_expand"`
-	MaxSampleRate      SampleRate `json:"max_sample_rate" bson:"max_sample_rate"`
-	Power              *Power     `json:"power" bson:"power"`
+	AnalogConnections  []*AnalogConn  `json:"analog_connections,omitempty" bson:"analog_connections"`
+	NetworkConnections []*NetworkConn `json:"network_connections,omitempty" bson:"network_connections"`
+	Faders             int            `json:"faders" bson:"faders"`
+	Motorized          bool           `json:"motorized" bson:"motorized"`
+	Midi               MidiType       `json:"midi" bson:"midi"`
+	ProtocolInputs     int            `json:"protocol_inputs" bson:"protocol_inputs"`
+	SignalProtocol     Protocol       `json:"signal_protocol" bson:"signal_protocol"`
+	CanExpand          bool           `json:"can_expand" bson:"can_expand"`
+	MaxSampleRate      SampleRate     `json:"max_sample_rate" bson:"max_sample_rate"`
+	Power              *Power         `json:"power" bson:"power"`
 }
 
 func (Console) IsCategoryDetails() {}
 
 type ConsoleInput struct {
-	TotalInputs        int         `json:"total_inputs" bson:"total_inputs"`
-	TotalOutputs       int         `json:"total_outputs" bson:"total_outputs"`
-	TotalBusses        int         `json:"total_busses" bson:"total_busses"`
-	PhysicalInputs     int         `json:"physical_inputs" bson:"physical_inputs"`
-	PhysicalOutputs    int         `json:"physical_outputs" bson:"physical_outputs"`
-	AuxInputs          int         `json:"aux_inputs" bson:"aux_inputs"`
-	PhysicalAuxInputs  int         `json:"physical_aux_inputs" bson:"physical_aux_inputs"`
-	PhantomPowerInputs int         `json:"phantom_power_inputs" bson:"phantom_power_inputs"`
-	Faders             int         `json:"faders" bson:"faders"`
-	Motorized          bool        `json:"motorized" bson:"motorized"`
-	Midi               MidiType    `json:"midi" bson:"midi"`
-	ProtocolInputs     int         `json:"protocol_inputs" bson:"protocol_inputs"`
-	SignalProtocol     Protocol    `json:"signal_protocol" bson:"signal_protocol"`
-	CanExpand          bool        `json:"can_expand" bson:"can_expand"`
-	MaxSampleRate      SampleRate  `json:"max_sample_rate" bson:"max_sample_rate"`
-	Power              *PowerInput `json:"power,omitempty" bson:"power"`
+	AnalogConnections  []*AnalogConnInput  `json:"analog_connections,omitempty" bson:"analog_connections"`
+	NetworkConnections []*NetworkConnInput `json:"network_connections,omitempty" bson:"network_connections"`
+	Faders             int                 `json:"faders" bson:"faders"`
+	Motorized          bool                `json:"motorized" bson:"motorized"`
+	Midi               MidiType            `json:"midi" bson:"midi"`
+	ProtocolInputs     int                 `json:"protocol_inputs" bson:"protocol_inputs"`
+	SignalProtocol     Protocol            `json:"signal_protocol" bson:"signal_protocol"`
+	CanExpand          bool                `json:"can_expand" bson:"can_expand"`
+	MaxSampleRate      SampleRate          `json:"max_sample_rate" bson:"max_sample_rate"`
+	Power              *PowerInput         `json:"power,omitempty" bson:"power"`
 }
 
 type Dimension struct {
@@ -255,6 +243,51 @@ func (e *Analog) UnmarshalGQL(v interface{}) error {
 }
 
 func (e Analog) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type AnalogUsage string
+
+const (
+	AnalogUsageInput    AnalogUsage = "INPUT"
+	AnalogUsageInput48v AnalogUsage = "INPUT_48V"
+	AnalogUsageOutput   AnalogUsage = "OUTPUT"
+	AnalogUsageAux      AnalogUsage = "AUX"
+)
+
+var AllAnalogUsage = []AnalogUsage{
+	AnalogUsageInput,
+	AnalogUsageInput48v,
+	AnalogUsageOutput,
+	AnalogUsageAux,
+}
+
+func (e AnalogUsage) IsValid() bool {
+	switch e {
+	case AnalogUsageInput, AnalogUsageInput48v, AnalogUsageOutput, AnalogUsageAux:
+		return true
+	}
+	return false
+}
+
+func (e AnalogUsage) String() string {
+	return string(e)
+}
+
+func (e *AnalogUsage) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = AnalogUsage(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid AnalogUsage", str)
+	}
+	return nil
+}
+
+func (e AnalogUsage) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

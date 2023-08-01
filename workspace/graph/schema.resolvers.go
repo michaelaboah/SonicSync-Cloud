@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	pkgDB "github.com/michaelaboah/sonic-sync-cloud/database"
 	"github.com/michaelaboah/sonic-sync-cloud/graph/model"
@@ -30,28 +31,39 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.UserInput
 
 // CreateItem is the resolver for the createItem field.
 func (r *mutationResolver) CreateItem(ctx context.Context, input model.ItemInput, details *model.CategoryDetailsInput) (*model.Item, error) {
-	var cat_details model.CategoryDetails
 
-	switch input.Category {
-	case model.CategoryConsole:
-		cat_details = details.ConsoleInput
-	}
 
-	items := r.DB.Database(pkgDB.EquipDB).Collection(pkgDB.ItemsCol)
-	item := &model.Item{
-		CreatedAt:    input.CreatedAt,
-		UpdatedAt:    input.UpdatedAt,
-		Cost:         input.Cost,
-		Model:        input.Model,
-		Weight:       input.Weight,
-		Manufacturer: input.Manufacturer,
-		Category:     input.Category,
-		Details:      cat_details,
-		Notes:        &input.Model,
-		Dimensions:   (*model.Dimension)(input.Dimensions),
-		PDFBlob:      input.PDFBlob,
-	}
-	items.InsertOne(ctx, item)
+    detailsBytes, err := bson.Marshal(details.ConsoleInput)
+    if err != nil {
+      log.Println(err)
+    }
+    
+
+    deets, err := model.MatchDetails(input.Category, detailsBytes)
+    if err != nil {
+      log.Println("Matching error: ", err)
+    }
+
+    items := r.DB.Database(pkgDB.EquipDB).Collection(pkgDB.ItemsCol)
+    item := &model.Item{
+      CreatedAt:    time.Now().String(),
+      UpdatedAt:    time.Now().String(),
+      Cost:         input.Cost,
+      Model:        input.Model,
+      Weight:       input.Weight,
+      Manufacturer: input.Manufacturer,
+      Category:     input.Category,
+      Details:      deets,
+      Notes:        &input.Model,
+      Dimensions:   (*model.Dimension)(input.Dimensions),
+      PDFBlob:      input.PDFBlob,
+    }
+
+  // fmt.Println(item)
+  _, err = items.InsertOne(ctx, item)
+  if err != nil {
+    log.Println(err)
+  }
 
 	return item, nil
 }
